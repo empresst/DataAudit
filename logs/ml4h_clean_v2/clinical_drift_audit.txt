@@ -1,0 +1,10 @@
+🚨 CLINICAL PRACTICE SHIFT DETECTED
+Between the training period (2014-2016) and the new data (2020-2022), patient treatment patterns have changed significantly.
+To maintain accuracy safely, the model locked its physiological representation and exclusively updated its treatment and fusion layers. This restores accuracy by forcing the network to relearn the specific features that carry high predictive importance but suffered from severe real-world drift (most notably Gcs Verbal Rate and Urine Output Ml Kg Hr Rate).
+
+Key clinical changes driving this update:
+• Urine Output Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Urine Output Ml Kg Hr Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Total Crystalloid Ml: Average value decreased from 908.82 to 639.82 (Severe Drift PSI: 0.10)
+• Lactate Time Delta Mean: Average value decreased from 2.24 to 2.11 (Severe Drift PSI: 0.07)
+• Central Line: Usage dropped by 5.9% in the newer data.

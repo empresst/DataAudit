@@ -1,0 +1,9 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+[check] adaptation cohorts identical in the vaso/intubation and mortality runs
+[calibration] 40 no-shift tests: AUROC mean 0.500 (max 0.521); false-alarm rate 0.0% at rule 'lower 95% bound > 0.6'
+[scale] adjacent source-period year groups ([np.str_('2008 - 2010'), np.str_('2011 - 2013')]): C2ST AUROC 0.593 (lower bound 0.578)  — what ordinary calendar drift looks like
+  step 1 2014 - 2016: C2ST AUROC all 0.715 (lo 0.702) | physio 0.699 (lo 0.685) | treat 0.597 (lo 0.578) | BBSD p tree 3.0e-01 nn 3.0e-01 → UPDATE; physiology moved too: freeze premise violated
+  step 2 2017 - 2019: C2ST AUROC all 0.799 (lo 0.787) | physio 0.761 (lo 0.747) | treat 0.720 (lo 0.706) | BBSD p tree 9.4e-03 nn 1.5e-01 → UPDATE; physiology moved too: freeze premise violated
+  step 3 2020 - 2022: C2ST AUROC all 0.770 (lo 0.755) | physio 0.728 (lo 0.714) | treat 0.728 (lo 0.713) | BBSD p tree 4.2e-01 nn 4.8e-06 → UPDATE; physiology moved too: freeze premise violated
+Saved → drift_detection_standard.json
+exit 0

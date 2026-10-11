@@ -1,0 +1,215 @@
+18:47:05 START drift_detector
+18:52:11 done  drift_detector
+18:52:11 START trees_eta0.03
+19:02:07 done  trees_eta0.03
+19:02:07 START trees_eta0.03
+19:06:38 done  trees_eta0.03
+19:06:38 START tree_update_expl
+19:07:58 done  tree_update_expl
+19:07:58 START tree_update_expl
+19:08:35 done  tree_update_expl
+19:08:35 START tree_expl_stability
+19:10:02 done  tree_expl_stability
+19:10:02 START tree_expl_stability
+19:10:50 done  tree_expl_stability
+19:10:50 START nn_update_expl
+19:28:18 done  nn_update_expl
+19:28:18 START nn_update_expl
+19:40:16 done  nn_update_expl
+19:40:16 START acc_A_vs_C
+19:41:28 done  acc_A_vs_C
+19:41:28 START acc_A_vs_C
+19:42:21 done  acc_A_vs_C
+19:42:21 START acc_pooled
+19:44:13 done  acc_pooled
+19:44:13 START retrieval
+19:49:10 done  retrieval
+19:49:10 START retrieval
+19:51:50 done  retrieval
+
+===== KEY RESULTS =====
+### ml4h_clean_v2
+--- drift_detector
+[check] adaptation cohorts identical in the vaso/intubation and mortality runs
+[calibration] C2ST false-alarm rate on 20 no-shift tests: 10% (alpha 0.05)
+  step 1 2014 - 2016: C2ST AUROC all 0.718 (p=7.3e-126) | physio 0.701 | treat 0.597 | BBSD p tree 3.0e-01 nn 3.0e-01 → UPDATE
+  step 2 2017 - 2019: C2ST AUROC all 0.798 (p=1.1e-234) | physio 0.765 | treat 0.719 | BBSD p tree 9.4e-03 nn 1.5e-01 → UPDATE
+  step 3 2020 - 2022: C2ST AUROC all 0.770 (p=6.6e-192) | physio 0.722 | treat 0.729 | BBSD p tree 4.2e-01 nn 4.8e-06 → UPDATE
+--- trees_eta0.03
+  B_xgb         eta sweep {0.03: 0.773} → 0.03 (grid edge)   [4.0 min]
+  C_xgb         eta sweep {0.03: 0.7864} → 0.03 (grid edge)   [4.1 min]
+    B_xgb         0.8411 ± 0.0032   gain vs A +0.0082
+    C_xgb         0.8330 ± 0.0046   gain vs A +0.0001
+    B_xgb − C_xgb              seed +0.0081 ± 0.0054 sign 4/5 | patient 95%[-0.0080,+0.0234] 90%lo -0.0052 → non-inferior
+    B_xgb         0.8032 ± 0.0010   gain vs A +0.0030
+    C_xgb         0.8034 ± 0.0026   gain vs A +0.0032
+    B_xgb − C_xgb              seed -0.0002 ± 0.0026 sign 2/5 | patient 95%[-0.0073,+0.0068] 90%lo -0.0059 → non-inferior
+    B_xgb         0.8235 ± 0.0026   gain vs A +0.0050
+    C_xgb         0.8220 ± 0.0011   gain vs A +0.0036
+    B_xgb − C_xgb              seed +0.0014 ± 0.0023 sign 4/5 | patient 95%[-0.0045,+0.0072] 90%lo -0.0037 → non-inferior
+    B_xgb         0.7823 ± 0.0034   gain vs A +0.0214
+    C_xgb         0.7779 ± 0.0037   gain vs A +0.0170
+    B_xgb − C_xgb              seed +0.0044 ± 0.0061 sign 4/5 | patient 95%[-0.0050,+0.0151] 90%lo -0.0037 → non-inferior
+    B_xgb         0.8226 ± 0.0026   gain vs A +0.0074
+    C_xgb         0.8309 ± 0.0087   gain vs A +0.0157
+    B_xgb − C_xgb              seed -0.0083 ± 0.0081 sign 0/5 | patient 95%[-0.0448,+0.0247] 90%lo -0.0388 → inconclusive
+    B_xgb         0.7634 ± 0.0037   gain vs A +0.0153
+    C_xgb         0.7759 ± 0.0013   gain vs A +0.0279
+    B_xgb − C_xgb              seed -0.0126 ± 0.0048 sign 0/5 | patient 95%[-0.0277,+0.0008] 90%lo -0.0251 → inconclusive
+    B_xgb         0.8002 ± 0.0016   gain vs A +0.0039
+    C_xgb         0.8048 ± 0.0017   gain vs A +0.0085
+    B_xgb − C_xgb              seed -0.0046 ± 0.0029 sign 1/5 | patient 95%[-0.0168,+0.0083] 90%lo -0.0147 → non-inferior
+    B_xgb         0.8119 ± 0.0011   gain vs A +0.0135
+    C_xgb         0.8256 ± 0.0027   gain vs A +0.0273
+    B_xgb − C_xgb              seed -0.0138 ± 0.0025 sign 0/5 | patient 95%[-0.0317,+0.0039] 90%lo -0.0282 → inconclusive
+Saved → modxgb_models_eta0.03.pkl  (20 updated models + source; reload check max |Δp| = 0.0e+00)
+--- tree_update_expl
+[checks] rebuilt models match saved predictions; decomposition exact (max residual 2.8e-06); B_xgb physiology branch unchanged at every step
+label  arm    era           sd dz   unif  %phys %learn  flip %phys|flip   (mean over 5 seeds)
+vasopr B_xgb  2014 - 2016   0.331 +0.338   6.8%  76.7%  2.5%       6.5%   seed-ρ 0.95
+vasopr B_xgb  2017 - 2019   0.399 +0.203  14.2%  71.5%  2.6%      14.9%   seed-ρ 0.95
+vasopr B_xgb  2020 - 2022   0.413 +0.236  12.2%  70.7%  2.2%      12.6%   seed-ρ 0.95
+vasopr C_xgb  2014 - 2016   0.333 +0.339  26.3%  80.6%  2.6%      26.2%   seed-ρ 0.90
+vasopr C_xgb  2017 - 2019   0.510 +0.204  34.2%  84.4%  3.7%      36.5%   seed-ρ 0.87
+vasopr C_xgb  2020 - 2022   0.547 +0.233  41.9%  84.4%  3.0%      45.1%   seed-ρ 0.92
+intuba B_xgb  2014 - 2016   0.250 +0.131  43.2%  47.9%  1.9%      44.4%   seed-ρ 0.92
+intuba B_xgb  2017 - 2019   0.422 -0.280  21.5%  68.7%  3.4%      23.0%   seed-ρ 0.97
+intuba B_xgb  2020 - 2022   0.125 +0.111  60.9%   3.4%  1.3%      63.6%   seed-ρ 0.97
+intuba C_xgb  2014 - 2016   0.553 +0.140  67.6%  84.8%  3.6%      69.1%   seed-ρ 0.92
+intuba C_xgb  2017 - 2019   0.528 -0.232  28.4%  88.2%  3.8%      30.0%   seed-ρ 0.93
+intuba C_xgb  2020 - 2022   0.147 +0.080  73.0%   5.3%  0.9%      74.6%   seed-ρ 0.93
+Top drivers of each update (final step, mean |attribution| over seeds):
+  vasopressor B_xgb  T:age, T:gcs_verbal_obs_rate, T:total_crystalloid_ml, T:mean_fio2_obs, T:max_fio2_obs, T:lactate_time_delta_mean
+  vasopressor C_xgb  T:age, T:total_crystalloid_ml, P:sbp_noninvasive, T:gcs_verbal_obs_rate, P:glucose_baseline, P:temperature_c
+  intubation  B_xgb  P:gcs_eye, P:gcs_motor, T:gcs_verbal_obs_rate, T:mean_fio2_obs, T:max_fio2_obs, P:gcs_verbal
+  intubation  C_xgb  P:gcs_motor, P:gcs_eye, T:gcs_verbal_obs_rate, P:resp_rate_rollstd_3, T:max_fio2_obs, P:temperature_c
+--- tree_expl_stability
+[check] B_xgb physiology Spearman = 1 for every patient, model and era (linear-head guarantee)
+vasopr 2020 - 2022  rho_all        0.763   0.652   +0.111  [+0.109, +0.113]  5/5
+vasopr 2020 - 2022  rho_treat      0.462   0.468   -0.006  [-0.009, -0.004]  2/5
+vasopr 2020 - 2022  rho_physio     1.000   0.780   +0.220  [+0.217, +0.223]  5/5
+                    seed-to-seed floor (rho phys/treat/all): B 1.000/0.849/0.926  C 0.930/0.839/0.893
+intuba 2020 - 2022  rho_all        0.838   0.722   +0.116  [+0.115, +0.117]  5/5
+intuba 2020 - 2022  rho_treat      0.762   0.765   -0.004  [-0.005, -0.003]  2/5
+intuba 2020 - 2022  rho_physio     1.000   0.680   +0.320  [+0.316, +0.325]  5/5
+                    seed-to-seed floor (rho phys/treat/all): B 1.000/0.972/0.983  C 0.865/0.974/0.929
+largest share of patients with an undefined Spearman (constant attribution row): 0.0%
+--- nn_update_expl
+[IG] median integration error of the update 0.0209 vs median patient-specific |Δz| 0.2770
+label  arm era           sd dz    unif  %phys  flip seed-ρ  (mean of 5 seeds)
+vasopr B   2014 - 2016   0.447  +0.879  34.0%  4.7%   0.92
+vasopr B   2017 - 2019   0.376  -0.020  30.0%  4.5%   0.90
+vasopr B   2020 - 2022   0.334  +0.474  39.9%  4.0%   0.86
+vasopr C   2014 - 2016   0.522  +0.871  44.2%  6.1%   0.91
+vasopr C   2017 - 2019   0.322  +0.106  44.8%  5.4%   0.76
+vasopr C   2020 - 2022   0.356  +0.326  52.3%  5.0%   0.74
+intuba B   2014 - 2016   0.499  +0.067  35.5%  5.1%   0.91
+intuba B   2017 - 2019   0.419  -0.256  35.0%  6.0%   0.87
+intuba B   2020 - 2022   0.427  +0.314  37.0%  4.7%   0.88
+intuba C   2014 - 2016   0.509  -0.162  40.9%  5.7%   0.91
+intuba C   2017 - 2019   0.387  +0.074  37.5%  5.9%   0.81
+intuba C   2020 - 2022   0.402  +0.210  36.6%  4.4%   0.78
+Top drivers of each update (final step):
+  vasopressor B T:gcs_verbal_obs_rate, P:sbp_noninvasive, T:mean_fio2_obs, T:age, T:max_fio2_obs, P:heart_rate
+  vasopressor C P:sbp_noninvasive, T:gcs_verbal_obs_rate, T:mean_fio2_obs, P:spo2, T:max_fio2_obs, P:heart_rate
+  intubation  B T:mean_fio2_obs, T:max_fio2_obs, T:gcs_verbal_obs_rate, P:sbp_noninvasive, T:urine_output_ml_kg_hr_obs_rate, T:urine_output_obs_rate
+  intubation  C T:mean_fio2_obs, T:gcs_verbal_obs_rate, T:max_fio2_obs, P:sbp_noninvasive, T:total_crystalloid_ml, T:map_invasive_time_delta_mean
+--- acc_A_vs_C
+neural Vasopressor 2014 - 2016  ev= 227  gain C +0.0030 [-0.0128,+0.0203]  gain B +0.0094  A-C -0.0030 lo90 -0.0175 A fails NI  | B-C +0.0064 lo90 -0.
+neural Vasopressor 2017 - 2019  ev= 284  gain C +0.0145 [-0.0023,+0.0321]  gain B +0.0147  A-C -0.0145 lo90 -0.0290 A fails NI  | B-C +0.0002 lo90 -0.
+neural Vasopressor 2020 - 2022  ev= 121  gain C +0.0074 [-0.0220,+0.0368]  gain B +0.0117  A-C -0.0074 lo90 -0.0331 A fails NI  | B-C +0.0043 lo90 -0.
+neural Intubation  2014 - 2016  ev= 156  gain C -0.0029 [-0.0269,+0.0220]  gain B +0.0066  A-C +0.0029 lo90 -0.0179 A fails NI  | B-C +0.0095 lo90 -0.
+neural Intubation  2017 - 2019  ev= 139  gain C -0.0042 [-0.0268,+0.0189]  gain B +0.0149  A-C +0.0042 lo90 -0.0164 A fails NI  | B-C +0.0191 lo90 +0.
+neural Intubation  2020 - 2022  ev=  69  gain C +0.0037 [-0.0262,+0.0344]  gain B +0.0075  A-C -0.0037 lo90 -0.0306 A fails NI  | B-C +0.0038 lo90 -0.
+trees  Vasopressor 2014 - 2016  ev= 227  gain C +0.0032 [-0.0095,+0.0156]  gain B +0.0030  A-C -0.0032 lo90 -0.0132 A PASSES NI | B-C -0.0002 lo90 -0.
+trees  Vasopressor 2017 - 2019  ev= 284  gain C +0.0036 [-0.0076,+0.0148]  gain B +0.0050  A-C -0.0036 lo90 -0.0124 A PASSES NI | B-C +0.0014 lo90 -0.
+trees  Vasopressor 2020 - 2022  ev= 121  gain C +0.0170 [-0.0054,+0.0375]  gain B +0.0214  A-C -0.0170 lo90 -0.0342 A fails NI  | B-C +0.0044 lo90 -0.
+trees  Intubation  2014 - 2016  ev= 156  gain C +0.0279 [+0.0070,+0.0496]  gain B +0.0153  A-C -0.0279 lo90 -0.0463 A fails NI  | B-C -0.0126 lo90 -0.
+trees  Intubation  2017 - 2019  ev= 139  gain C +0.0085 [-0.0090,+0.0249]  gain B +0.0039  A-C -0.0085 lo90 -0.0224 A fails NI  | B-C -0.0046 lo90 -0.
+trees  Intubation  2020 - 2022  ev=  69  gain C +0.0273 [-0.0044,+0.0598]  gain B +0.0135  A-C -0.0273 lo90 -0.0527 A fails NI  | B-C -0.0138 lo90 -0.
+--- acc_pooled
+subjects 15742, bootstrap resamples used 1000, 1.9 min
+  vaso.both.D                  +0.0023  95% [-0.0014, +0.0058]  p=0.214   (B - C)
+  vaso.both.R                  +1.31  95% [+0.74, +4.90]  p=0.040   (retained)
+  intub.both.D                 +0.0012  95% [-0.0060, +0.0084]  p=0.714   (B - C)
+  intub.both.R                 +1.13  95% [-3.73, +5.16]  p=0.102   (retained)
+  mort.both.D                  -0.0018  95% [-0.0029, -0.0004]  p=0.004   (B - C)
+  mort.both.R                  +0.77  95% [+0.62, +0.93]  p=0.000   (retained)
+  R(intub)-R(vaso).both        -0.18  95% [-7.48, +4.83]  p=0.766
+  R(intub)-R(mort).both        +0.36  95% [-4.41, +4.44]  p=0.410
+  vaso.both.D                  +0.0028  95% [-0.0011, +0.0064]  p=0.172   (B - C)
+  vaso.both.R                  +1.34  95% [-0.71, +5.21]  p=0.062   (retained)
+  intub.both.D                 +0.0002  95% [-0.0077, +0.0081]  p=0.924   (B - C)
+  intub.both.R                 +1.02  95% [-1.81, +3.74]  p=0.084   (retained)
+  mort.both.D                  -0.0017  95% [-0.0030, -0.0002]  p=0.022   (B - C)
+  mort.both.R                  +0.78  95% [+0.64, +0.96]  p=0.000   (retained)
+  R(intub)-R(vaso).both        -0.32  95% [-6.37, +4.09]  p=0.622
+  R(intub)-R(mort).both        +0.25  95% [-2.56, +2.96]  p=0.542
+--- retrieval
+[check] corpus 3668 abstracts, cached embeddings (3668, 768), MedCPT query encoder loaded offline
+  vasopr trees  n=271  Jaccard vs source  physio B 1.000 C 0.375 (B>C 5/5) | treat B 0.338 C 0.368 (B>C 1/5)
+  vasopr neural n=271  Jaccard vs source  physio B 0.298 C 0.264 (B>C 5/5) | treat B 0.242 C 0.294 (B>C 0/5)
+  intuba trees  n=219  Jaccard vs source  physio B 1.000 C 0.474 (B>C 5/5) | treat B 0.604 C 0.559 (B>C 4/5)
+  intuba neural n=219  Jaccard vs source  physio B 0.252 C 0.238 (B>C 4/5) | treat B 0.413 C 0.411 (B>C 2/5)
+Saved → retrieval_eta0.03_lr3e-3.json
+### ml4h_clean_v2_mortality
+--- trees_eta0.03
+  B_xgb         eta sweep {0.03: 0.8967} → 0.03 (grid edge)   [1.4 min]
+  C_xgb         eta sweep {0.03: 0.8963} → 0.03 (grid edge)   [1.5 min]
+    B_xgb         0.8936 ± 0.0011   gain vs A +0.0034
+    C_xgb         0.8895 ± 0.0019   gain vs A -0.0007
+    B_xgb − C_xgb              seed +0.0041 ± 0.0019 sign 5/5 | patient 95%[-0.0019,+0.0110] 90%lo -0.0009 → non-inferior
+    B_xgb         0.8692 ± 0.0004   gain vs A +0.0059
+    C_xgb         0.8714 ± 0.0007   gain vs A +0.0081
+    B_xgb − C_xgb              seed -0.0022 ± 0.0010 sign 0/5 | patient 95%[-0.0048,+0.0004] 90%lo -0.0043 → non-inferior
+    B_xgb         0.8764 ± 0.0006   gain vs A +0.0058
+    C_xgb         0.8779 ± 0.0011   gain vs A +0.0073
+    B_xgb − C_xgb              seed -0.0015 ± 0.0016 sign 1/5 | patient 95%[-0.0038,+0.0009] 90%lo -0.0034 → non-inferior
+    B_xgb         0.8643 ± 0.0005   gain vs A +0.0064
+    C_xgb         0.8662 ± 0.0015   gain vs A +0.0083
+    B_xgb − C_xgb              seed -0.0019 ± 0.0018 sign 1/5 | patient 95%[-0.0058,+0.0020] 90%lo -0.0053 → non-inferior
+Saved → modxgb_models_eta0.03.pkl  (10 updated models + source; reload check max |Δp| = 0.0e+00)
+--- tree_update_expl
+[checks] rebuilt models match saved predictions; decomposition exact (max residual 9.2e-07); B_xgb physiology branch unchanged at every step
+label  arm    era           sd dz   unif  %phys %learn  flip %phys|flip   (mean over 5 seeds)
+mortal B_xgb  2014 - 2016   0.399 -0.003   3.3%  27.9%  1.4%       3.5%   seed-ρ 0.99
+mortal B_xgb  2017 - 2019   0.257 -0.031  23.9%  63.9%  2.1%      23.6%   seed-ρ 0.90
+mortal B_xgb  2020 - 2022   0.117 -0.009  12.6%  45.0%  0.6%      13.4%   seed-ρ 0.86
+mortal C_xgb  2014 - 2016   0.562 -0.012  58.3%  62.9%  3.3%      63.8%   seed-ρ 0.92
+mortal C_xgb  2017 - 2019   0.296 -0.024  43.3%  84.3%  2.4%      45.0%   seed-ρ 0.74
+mortal C_xgb  2020 - 2022   0.139 -0.025  39.0%  59.8%  0.9%      40.0%   seed-ρ 0.75
+Top drivers of each update (final step, mean |attribution| over seeds):
+  mortality   B_xgb  T:age, T:lactate_time_delta_mean, T:max_fio2_obs, T:mean_fio2_obs, T:map_invasive_time_delta_mean, T:total_crystalloid_ml
+  mortality   C_xgb  T:age, T:total_crystalloid_ml, P:dbp_noninvasive, T:urine_output_obs_rate, T:ph_venous_obs_rate, T:lactate_time_delta_mean
+--- tree_expl_stability
+[check] B_xgb physiology Spearman = 1 for every patient, model and era (linear-head guarantee)
+mortal 2020 - 2022  rho_all        0.918   0.845   +0.073  [+0.072, +0.074]  5/5
+mortal 2020 - 2022  rho_treat      0.835   0.862   -0.026  [-0.027, -0.025]  1/5
+mortal 2020 - 2022  rho_physio     1.000   0.827   +0.173  [+0.171, +0.176]  5/5
+                    seed-to-seed floor (rho phys/treat/all): B 1.000/0.929/0.966  C 0.889/0.938/0.914
+largest share of patients with an undefined Spearman (constant attribution row): 0.0%
+--- nn_update_expl
+[IG] median integration error of the update 0.0161 vs median patient-specific |Δz| 0.1179
+label  arm era           sd dz    unif  %phys  flip seed-ρ  (mean of 5 seeds)
+mortal B   2014 - 2016   0.186  +0.224  26.5%  1.2%   0.96
+mortal B   2017 - 2019   0.270  -0.024  24.7%  1.4%   0.96
+mortal B   2020 - 2022   0.154  -0.065  25.8%  1.0%   0.95
+mortal C   2014 - 2016   0.236  +0.136  43.0%  1.9%   0.88
+mortal C   2017 - 2019   0.155  +0.097  37.5%  1.6%   0.82
+mortal C   2020 - 2022   0.197  -0.230  37.5%  1.4%   0.87
+Top drivers of each update (final step):
+  mortality   B T:heart_rate_obs_rate, T:map_invasive_time_delta_mean, T:age, T:lactate_time_delta_mean, T:gcs_verbal_obs_rate, T:resp_rate_obs_rate
+  mortality   C T:heart_rate_obs_rate, T:map_invasive_time_delta_mean, T:lactate_time_delta_mean, T:age, T:resp_rate_obs_rate, P:resp_rate_rollmean_3
+--- acc_A_vs_C
+neural Mortality   2014 - 2016  ev= 820  gain C +0.0056 [+0.0020,+0.0091]  gain B +0.0058  A-C -0.0056 lo90 -0.0085 A PASSES NI | B-C +0.0002 lo90 -0.
+neural Mortality   2017 - 2019  ev= 972  gain C +0.0083 [+0.0048,+0.0115]  gain B +0.0049  A-C -0.0083 lo90 -0.0110 A PASSES NI | B-C -0.0034 lo90 -0.
+neural Mortality   2020 - 2022  ev= 363  gain C +0.0076 [+0.0025,+0.0125]  gain B +0.0064  A-C -0.0076 lo90 -0.0119 A PASSES NI | B-C -0.0012 lo90 -0.
+trees  Mortality   2014 - 2016  ev= 820  gain C +0.0081 [+0.0041,+0.0117]  gain B +0.0059  A-C -0.0081 lo90 -0.0112 A PASSES NI | B-C -0.0022 lo90 -0.
+trees  Mortality   2017 - 2019  ev= 972  gain C +0.0073 [+0.0041,+0.0106]  gain B +0.0058  A-C -0.0073 lo90 -0.0100 A PASSES NI | B-C -0.0015 lo90 -0.
+trees  Mortality   2020 - 2022  ev= 363  gain C +0.0083 [+0.0029,+0.0140]  gain B +0.0064  A-C -0.0083 lo90 -0.0131 A PASSES NI | B-C -0.0019 lo90 -0.
+--- retrieval
+[check] corpus 3668 abstracts, cached embeddings (3668, 768), MedCPT query encoder loaded offline
+  mortal trees  n=300  Jaccard vs source  physio B 1.000 C 0.423 (B>C 5/5) | treat B 0.289 C 0.341 (B>C 1/5)
+  mortal neural n=300  Jaccard vs source  physio B 0.638 C 0.509 (B>C 5/5) | treat B 0.596 C 0.696 (B>C 1/5)
+Saved → retrieval_eta0.03_bc_states.json
+19:51:50 ALL DONE

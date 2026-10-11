@@ -1,0 +1,23 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+[IG] median integration error of the update 0.0209 vs median patient-specific |Δz| 0.2770
+
+label  arm era           sd dz    unif  %phys  flip seed-ρ  (mean of 5 seeds)
+vasopr B   2014 - 2016   0.447  +0.879  34.0%  4.7%   0.92
+vasopr B   2017 - 2019   0.376  -0.020  30.0%  4.5%   0.90
+vasopr B   2020 - 2022   0.334  +0.474  39.9%  4.0%   0.86
+vasopr C   2014 - 2016   0.522  +0.871  44.2%  6.1%   0.91
+vasopr C   2017 - 2019   0.322  +0.106  44.8%  5.4%   0.76
+vasopr C   2020 - 2022   0.356  +0.326  52.3%  5.0%   0.74
+intuba B   2014 - 2016   0.499  +0.067  35.5%  5.1%   0.91
+intuba B   2017 - 2019   0.419  -0.256  35.0%  6.0%   0.87
+intuba B   2020 - 2022   0.427  +0.314  37.0%  4.7%   0.88
+intuba C   2014 - 2016   0.509  -0.162  40.9%  5.7%   0.91
+intuba C   2017 - 2019   0.387  +0.074  37.5%  5.9%   0.81
+intuba C   2020 - 2022   0.402  +0.210  36.6%  4.4%   0.78
+
+Top drivers of each update (final step):
+  vasopressor B T:gcs_verbal_obs_rate, P:sbp_noninvasive, T:mean_fio2_obs, T:age, T:max_fio2_obs, P:heart_rate
+  vasopressor C P:sbp_noninvasive, T:gcs_verbal_obs_rate, T:mean_fio2_obs, P:spo2, T:max_fio2_obs, P:heart_rate
+  intubation  B T:mean_fio2_obs, T:max_fio2_obs, T:gcs_verbal_obs_rate, P:sbp_noninvasive, T:urine_output_ml_kg_hr_obs_rate, T:urine_output_obs_rate
+  intubation  C T:mean_fio2_obs, T:gcs_verbal_obs_rate, T:max_fio2_obs, P:sbp_noninvasive, T:total_crystalloid_ml, T:map_invasive_time_delta_mean
+Saved → nn_update_explanations_lr3e-3.json

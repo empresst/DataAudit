@@ -1,0 +1,6 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10870.18it/s]
+[check] corpus 3668 abstracts, cached embeddings (3668, 768), MedCPT query encoder loaded offline
+  mortal trees  n=300  Jaccard vs source  physio B 1.000 C 0.423 (B>C 5/5) | treat B 0.289 C 0.341 (B>C 1/5)
+  mortal neural n=300  Jaccard vs source  physio B 0.638 C 0.509 (B>C 5/5) | treat B 0.596 C 0.696 (B>C 1/5)
+Saved → retrieval_eta0.03_bc_states.json

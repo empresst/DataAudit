@@ -1,0 +1,97 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+  bootstrap 100/1000  [0.2 min]
+  bootstrap 200/1000  [0.4 min]
+  bootstrap 300/1000  [0.6 min]
+  bootstrap 400/1000  [0.8 min]
+  bootstrap 500/1000  [1.0 min]
+  bootstrap 600/1000  [1.2 min]
+  bootstrap 700/1000  [1.4 min]
+  bootstrap 800/1000  [1.6 min]
+  bootstrap 900/1000  [1.8 min]
+  bootstrap 1000/1000  [2.0 min]
+
+subjects 15742, bootstrap resamples used 1000, 2.0 min
+
+=== weights: events ===
+  vaso.neural.D                -0.0044  95% [-0.0105, +0.0017]  p=0.176   (B - C)
+  vaso.trees.D                 +0.0032  95% [-0.0011, +0.0076]  p=0.148   (B - C)
+  vaso.both.D                  -0.0006  95% [-0.0044, +0.0027]  p=0.718   (B - C)
+  vaso.neural.GC               +0.0166  95% [+0.0093, +0.0243]  p=0.000   (C - A)
+  vaso.trees.GC                +0.0058  95% [-0.0015, +0.0134]  p=0.128   (C - A)
+  vaso.both.GC                 +0.0112  95% [+0.0056, +0.0172]  p=0.000   (C - A)
+  vaso.neural.R                +0.73  95% [+0.17, +1.10]  p=0.024   (retained)
+  vaso.trees.R                 +1.55  95% [-4.40, +8.30]  p=0.124   (retained)
+  vaso.both.R                  +0.95  95% [+0.53, +1.29]  p=0.002   (retained)
+
+  intub.neural.D               -0.0142  95% [-0.0250, -0.0034]  p=0.012   (B - C)
+  intub.trees.D                -0.0128  95% [-0.0216, -0.0039]  p=0.014   (B - C)
+  intub.both.D                 -0.0135  95% [-0.0209, -0.0060]  p=0.002   (B - C)
+  intub.neural.GC              +0.0242  95% [+0.0140, +0.0335]  p=0.000   (C - A)
+  intub.trees.GC               +0.0188  95% [+0.0067, +0.0298]  p=0.002   (C - A)
+  intub.both.GC                +0.0215  95% [+0.0129, +0.0294]  p=0.000   (C - A)
+  intub.neural.R               +0.41  95% [-0.30, +0.86]  p=0.198   (retained)
+  intub.trees.R                +0.32  95% [+0.03, +0.60]  p=0.040   (retained)
+  intub.both.R                 +0.37  95% [+0.01, +0.68]  p=0.044   (retained)
+
+  mort.neural.D                -0.0017  95% [-0.0033, +0.0002]  p=0.062   (B - C)
+  mort.trees.D                 -0.0028  95% [-0.0046, -0.0011]  p=0.002   (B - C)
+  mort.both.D                  -0.0023  95% [-0.0035, -0.0009]  p=0.000   (B - C)
+  mort.neural.GC               +0.0072  95% [+0.0047, +0.0092]  p=0.000   (C - A)
+  mort.trees.GC                +0.0078  95% [+0.0053, +0.0101]  p=0.000   (C - A)
+  mort.both.GC                 +0.0075  95% [+0.0054, +0.0094]  p=0.000   (C - A)
+  mort.neural.R                +0.77  95% [+0.54, +1.03]  p=0.000   (retained)
+  mort.trees.R                 +0.63  95% [+0.52, +0.81]  p=0.000   (retained)
+  mort.both.R                  +0.70  95% [+0.57, +0.85]  p=0.000   (retained)
+
+  R(intub)-R(vaso).neural      -0.32  95% [-1.04, +0.34]  p=0.284
+  R(intub)-R(mort).neural      -0.36  95% [-1.07, +0.15]  p=0.168
+  R(vaso)-R(mort).neural       -0.03  95% [-0.69, +0.38]  p=0.836
+  R(intub)-R(vaso).trees       -1.23  95% [-7.99, +5.00]  p=0.130
+  R(intub)-R(mort).trees       -0.32  95% [-0.64, -0.01]  p=0.044
+  R(vaso)-R(mort).trees        +0.91  95% [-5.02, +7.69]  p=0.136
+  R(intub)-R(vaso).both        -0.58  95% [-1.06, -0.10]  p=0.032
+  R(intub)-R(mort).both        -0.33  95% [-0.73, +0.01]  p=0.052
+  R(vaso)-R(mort).both         +0.25  95% [-0.21, +0.60]  p=0.248
+
+=== weights: equal ===
+  vaso.neural.D                -0.0032  95% [-0.0104, +0.0040]  p=0.356   (B - C)
+  vaso.trees.D                 +0.0044  95% [-0.0003, +0.0089]  p=0.068   (B - C)
+  vaso.both.D                  +0.0006  95% [-0.0038, +0.0045]  p=0.812   (B - C)
+  vaso.neural.GC               +0.0152  95% [+0.0067, +0.0232]  p=0.000   (C - A)
+  vaso.trees.GC                +0.0073  95% [-0.0010, +0.0158]  p=0.088   (C - A)
+  vaso.both.GC                 +0.0112  95% [+0.0048, +0.0178]  p=0.000   (C - A)
+  vaso.neural.R                +0.79  95% [+0.02, +1.26]  p=0.042   (retained)
+  vaso.trees.R                 +1.60  95% [-3.57, +8.75]  p=0.086   (retained)
+  vaso.both.R                  +1.05  95% [+0.59, +1.53]  p=0.000   (retained)
+
+  intub.neural.D               -0.0149  95% [-0.0254, -0.0046]  p=0.004   (B - C)
+  intub.trees.D                -0.0136  95% [-0.0232, -0.0040]  p=0.012   (B - C)
+  intub.both.D                 -0.0143  95% [-0.0219, -0.0070]  p=0.002   (B - C)
+  intub.neural.GC              +0.0245  95% [+0.0146, +0.0342]  p=0.000   (C - A)
+  intub.trees.GC               +0.0201  95% [+0.0071, +0.0330]  p=0.000   (C - A)
+  intub.both.GC                +0.0223  95% [+0.0133, +0.0315]  p=0.000   (C - A)
+  intub.neural.R               +0.39  95% [-0.30, +0.83]  p=0.208   (retained)
+  intub.trees.R                +0.32  95% [+0.03, +0.62]  p=0.040   (retained)
+  intub.both.R                 +0.36  95% [+0.01, +0.65]  p=0.044   (retained)
+
+  mort.neural.D                -0.0015  95% [-0.0034, +0.0003]  p=0.116   (B - C)
+  mort.trees.D                 -0.0029  95% [-0.0047, -0.0010]  p=0.002   (B - C)
+  mort.both.D                  -0.0022  95% [-0.0036, -0.0007]  p=0.002   (B - C)
+  mort.neural.GC               +0.0072  95% [+0.0046, +0.0095]  p=0.000   (C - A)
+  mort.trees.GC                +0.0079  95% [+0.0053, +0.0105]  p=0.000   (C - A)
+  mort.both.GC                 +0.0075  95% [+0.0054, +0.0097]  p=0.000   (C - A)
+  mort.neural.R                +0.79  95% [+0.58, +1.06]  p=0.000   (retained)
+  mort.trees.R                 +0.63  95% [+0.50, +0.83]  p=0.000   (retained)
+  mort.both.R                  +0.71  95% [+0.58, +0.88]  p=0.000   (retained)
+
+  R(intub)-R(vaso).neural      -0.39  95% [-1.17, +0.42]  p=0.264
+  R(intub)-R(mort).neural      -0.40  95% [-1.11, +0.09]  p=0.122
+  R(vaso)-R(mort).neural       -0.01  95% [-0.81, +0.49]  p=0.958
+  R(intub)-R(vaso).trees       -1.28  95% [-8.45, +3.94]  p=0.092
+  R(intub)-R(mort).trees       -0.31  95% [-0.67, -0.00]  p=0.048
+  R(vaso)-R(mort).trees        +0.97  95% [-4.30, +8.05]  p=0.088
+  R(intub)-R(vaso).both        -0.69  95% [-1.27, -0.18]  p=0.014
+  R(intub)-R(mort).both        -0.35  95% [-0.75, -0.02]  p=0.034
+  R(vaso)-R(mort).both         +0.34  95% [-0.15, +0.84]  p=0.170
+
+Saved -> pooled.json

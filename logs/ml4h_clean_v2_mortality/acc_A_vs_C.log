@@ -1,0 +1,9 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+neural Mortality   2014 - 2016  ev= 820  gain C +0.0056 [+0.0020,+0.0091]  gain B +0.0058  A-C -0.0056 lo90 -0.0085 A PASSES NI | B-C +0.0002 lo90 -0.0020 B NI | retained 1.03 [0.59,1.99]
+neural Mortality   2017 - 2019  ev= 972  gain C +0.0083 [+0.0048,+0.0115]  gain B +0.0049  A-C -0.0083 lo90 -0.0110 A PASSES NI | B-C -0.0034 lo90 -0.0054 B NI | retained 0.59 [0.31,0.88]
+neural Mortality   2020 - 2022  ev= 363  gain C +0.0076 [+0.0025,+0.0125]  gain B +0.0064  A-C -0.0076 lo90 -0.0119 A PASSES NI | B-C -0.0012 lo90 -0.0044 B NI | retained 0.84 [0.40,1.59]
+trees  Mortality   2014 - 2016  ev= 820  gain C +0.0081 [+0.0041,+0.0117]  gain B +0.0059  A-C -0.0081 lo90 -0.0112 A PASSES NI | B-C -0.0022 lo90 -0.0043 B NI | retained 0.72 [0.51,1.07]
+trees  Mortality   2017 - 2019  ev= 972  gain C +0.0073 [+0.0041,+0.0106]  gain B +0.0058  A-C -0.0073 lo90 -0.0100 A PASSES NI | B-C -0.0015 lo90 -0.0034 B NI | retained 0.80 [0.58,1.18]
+trees  Mortality   2020 - 2022  ev= 363  gain C +0.0083 [+0.0029,+0.0140]  gain B +0.0064  A-C -0.0083 lo90 -0.0131 A PASSES NI | B-C -0.0019 lo90 -0.0053 B NI | retained 0.77 [0.44,1.50]
+
+Saved -> A_vs_C_shared.json/.csv  (NN per_era_predictions_seeds.npz, trees per_era_predictions_modxgb_eta0.03.npz)

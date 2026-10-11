@@ -1,0 +1,29 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+[checks] B's LSTM identical to the source at every step; reloaded models reproduce saved predictions
+[IG] completeness error: median 0.0446 vs median |f(x)-f(0)| 0.8985  (ratio 5.0%)
+
+NEURAL: source-vs-updated explanation agreement, B (bounded) vs C (full); mean over 5 seeds
+label  era          measure            B       C      B-C  seed sd  B>C seeds
+mortal 2014 - 2016  rho_all        0.973   0.966   +0.007    0.027  2/5
+mortal 2014 - 2016  rho_physio     0.985   0.946   +0.040    0.037  5/5
+mortal 2014 - 2016  rho_treat      0.970   0.981   -0.012    0.019  2/5
+mortal 2014 - 2016  top5_all       0.821   0.797   +0.024    0.076  2/5
+mortal 2014 - 2016  top5_physio    0.886   0.773   +0.113    0.101  5/5
+mortal 2014 - 2016  top5_treat     0.841   0.877   -0.036    0.066  2/5
+
+mortal 2017 - 2019  rho_all        0.942   0.950   -0.008    0.022  1/5
+mortal 2017 - 2019  rho_physio     0.970   0.928   +0.042    0.028  5/5
+mortal 2017 - 2019  rho_treat      0.938   0.969   -0.032    0.023  1/5
+mortal 2017 - 2019  top5_all       0.740   0.777   -0.037    0.043  1/5
+mortal 2017 - 2019  top5_physio    0.812   0.710   +0.102    0.074  5/5
+mortal 2017 - 2019  top5_treat     0.773   0.841   -0.068    0.033  0/5
+
+mortal 2020 - 2022  rho_all        0.926   0.932   -0.006    0.031  1/5
+mortal 2020 - 2022  rho_physio     0.964   0.893   +0.072    0.034  5/5
+mortal 2020 - 2022  rho_treat      0.920   0.963   -0.043    0.031  1/5
+mortal 2020 - 2022  top5_all       0.696   0.746   -0.049    0.053  1/5
+mortal 2020 - 2022  top5_physio    0.792   0.687   +0.105    0.057  5/5
+mortal 2020 - 2022  top5_treat     0.735   0.818   -0.083    0.055  1/5
+                    seed-to-seed floor (rho phys/treat/all): B 0.989/0.957/0.965  C 0.963/0.974/0.967
+
+Saved → nn_explanation_stability.json

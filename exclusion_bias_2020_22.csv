@@ -1,0 +1,6 @@
+variable,type,excluded_stat,retained_stat,smd,balanced_smd_under_0_1
+N (stays),Count,8124,6962,,
+Age (years),Continuous,65.13 ± 16.25,65.12 ± 16.18,0.0005,true
+Weight (kg),Continuous,78.50 ± 8.92,78.68 ± 9.89,-0.0191,true
+Female (%),Binary,43.6%,43.3%,0.0069,true
+In-hospital Mortality (%),Binary,12.2%,11.4%,0.0266,true

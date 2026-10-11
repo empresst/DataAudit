@@ -1,0 +1,31 @@
+==============================================================================
+1. ERA BOUNDARY (reconstructed year, ±1 year)
+==============================================================================
+  train+val stays 28617, test stays 51208
+  test stays with reconstructed year 2014 (true year may be 2013): 1376 (2.7%)
+  train/val stays with reconstructed year 2013 (true year may be 2014): 2128 (7.4%)
+  test stays whose RAW anchor_year_group is a training group: 10224 (20.0%)
+
+==============================================================================
+2. HOUR-0 OBSERVATION RATE BY ERA
+==============================================================================
+  channel                    train | 14-16 | 17-19 | 20-22
+  urine_output              0.372 | 0.345 | 0.294 | 0.230
+  urine_output_ml_kg_hr     0.372 | 0.345 | 0.294 | 0.230
+  lactate                   0.071 | 0.097 | 0.111 | 0.138
+  lactate_baseline          0.071 | 0.097 | 0.111 | 0.138
+  lactate_delta             0.071 | 0.097 | 0.111 | 0.138
+  lactate_ratio             0.071 | 0.097 | 0.111 | 0.138
+  base_excess               0.081 | 0.101 | 0.118 | 0.147
+  pco2_venous               0.081 | 0.101 | 0.118 | 0.147
+  ph_venous                 0.086 | 0.107 | 0.122 | 0.149
+  bilirubin_total           0.077 | 0.088 | 0.107 | 0.133
+  bilirubin_total_baseline  0.077 | 0.088 | 0.107 | 0.133
+  bilirubin_total_delta     0.077 | 0.088 | 0.107 | 0.133
+  channels with |Δ rate| > 0.05 by 2020-22: 13/47; > 0.10: 2
+
+==============================================================================
+3. PAPER NUMBERS FOUND IN THE SUPPLEMENT RUN LOGS
+==============================================================================
+  69/69 numbers found
+  bedside check: vaso 0.2571*105/6889*1000 = 3.92; intub 0.1351*148/5004*1000 = 4.00

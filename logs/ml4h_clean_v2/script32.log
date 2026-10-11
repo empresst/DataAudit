@@ -1,0 +1,51 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+[check] B_xgb physiology Spearman = 1 for every patient, model and era (linear-head guarantee)
+
+Source-vs-updated explanation agreement, B (bounded) vs C (full); mean over 5 seeds and patients
+label  era          measure            B       C      B-C              95% CI  B>C seeds
+vasopr 2014 - 2016  rho_all        0.931   0.892   +0.039  [+0.039, +0.039]  5/5
+vasopr 2014 - 2016  rho_treat      0.824   0.786   +0.038  [+0.037, +0.038]  4/5
+vasopr 2014 - 2016  top5_all       0.792   0.771   +0.021  [+0.018, +0.024]  4/5
+vasopr 2014 - 2016  top5_treat     0.729   0.691   +0.038  [+0.035, +0.041]  3/5
+vasopr 2014 - 2016  rho_physio     1.000   0.959   +0.041  [+0.040, +0.041]  5/5
+vasopr 2014 - 2016  top5_physio    1.000   0.831   +0.169  [+0.166, +0.172]  5/5
+
+vasopr 2017 - 2019  rho_all        0.821   0.686   +0.135  [+0.134, +0.135]  5/5
+vasopr 2017 - 2019  rho_treat      0.584   0.503   +0.082  [+0.080, +0.083]  5/5
+vasopr 2017 - 2019  top5_all       0.736   0.667   +0.069  [+0.065, +0.072]  5/5
+vasopr 2017 - 2019  top5_treat     0.614   0.527   +0.086  [+0.083, +0.089]  5/5
+vasopr 2017 - 2019  rho_physio     1.000   0.824   +0.176  [+0.175, +0.178]  5/5
+vasopr 2017 - 2019  top5_physio    1.000   0.680   +0.320  [+0.317, +0.323]  5/5
+
+vasopr 2020 - 2022  rho_all        0.794   0.632   +0.162  [+0.160, +0.163]  5/5
+vasopr 2020 - 2022  rho_treat      0.534   0.444   +0.090  [+0.087, +0.093]  5/5
+vasopr 2020 - 2022  top5_all       0.633   0.566   +0.067  [+0.061, +0.073]  5/5
+vasopr 2020 - 2022  top5_treat     0.557   0.487   +0.070  [+0.065, +0.075]  5/5
+vasopr 2020 - 2022  rho_physio     1.000   0.768   +0.232  [+0.229, +0.235]  5/5
+vasopr 2020 - 2022  top5_physio    1.000   0.608   +0.392  [+0.386, +0.399]  5/5
+                    seed-to-seed floor (rho phys/treat/all): B 1.000/0.974/0.988  C 0.837/0.653/0.757
+
+intuba 2014 - 2016  rho_all        0.971   0.829   +0.142  [+0.141, +0.143]  5/5
+intuba 2014 - 2016  rho_treat      0.963   0.918   +0.045  [+0.044, +0.045]  5/5
+intuba 2014 - 2016  top5_all       0.809   0.720   +0.089  [+0.084, +0.094]  5/5
+intuba 2014 - 2016  top5_treat     0.940   0.835   +0.105  [+0.102, +0.109]  5/5
+intuba 2014 - 2016  rho_physio     1.000   0.698   +0.302  [+0.299, +0.304]  5/5
+intuba 2014 - 2016  top5_physio    1.000   0.517   +0.483  [+0.480, +0.487]  5/5
+
+intuba 2017 - 2019  rho_all        0.930   0.712   +0.218  [+0.217, +0.220]  5/5
+intuba 2017 - 2019  rho_treat      0.898   0.761   +0.137  [+0.136, +0.139]  5/5
+intuba 2017 - 2019  top5_all       0.764   0.688   +0.076  [+0.072, +0.080]  5/5
+intuba 2017 - 2019  top5_treat     0.835   0.662   +0.173  [+0.169, +0.177]  5/5
+intuba 2017 - 2019  rho_physio     1.000   0.653   +0.347  [+0.345, +0.349]  5/5
+intuba 2017 - 2019  top5_physio    1.000   0.526   +0.474  [+0.471, +0.478]  5/5
+
+intuba 2020 - 2022  rho_all        0.926   0.707   +0.220  [+0.218, +0.222]  5/5
+intuba 2020 - 2022  rho_treat      0.896   0.760   +0.136  [+0.134, +0.138]  5/5
+intuba 2020 - 2022  top5_all       0.718   0.672   +0.046  [+0.039, +0.053]  5/5
+intuba 2020 - 2022  top5_treat     0.834   0.663   +0.172  [+0.165, +0.179]  5/5
+intuba 2020 - 2022  rho_physio     1.000   0.647   +0.353  [+0.350, +0.357]  5/5
+intuba 2020 - 2022  top5_physio    1.000   0.535   +0.465  [+0.459, +0.471]  5/5
+                    seed-to-seed floor (rho phys/treat/all): B 1.000/0.990/0.995  C 0.685/0.933/0.828
+
+largest share of patients with an undefined Spearman (constant attribution row): 0.0%
+Saved → explanation_stability.json

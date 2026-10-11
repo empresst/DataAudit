@@ -1,0 +1,13 @@
+family,label,era,BmC_matched,BmC_unequal,lo90_matched,lo90_unequal,verdict_matched,verdict_unequal,same_NI
+Neural,intubation,2014 - 2016,0.0095,-0.0141,-0.0064,-0.0313,non-inferior,inconclusive,False
+Neural,intubation,2017 - 2019,0.0191,-0.0125,0.0072,-0.0251,superior,inconclusive,False
+Neural,intubation,2020 - 2022,0.0038,-0.018,-0.0144,-0.0352,non-inferior,inconclusive,False
+Neural,vasopressor,2014 - 2016,0.0064,-0.002,-0.0024,-0.0104,non-inferior,non-inferior,True
+Neural,vasopressor,2017 - 2019,0.0002,-0.0086,-0.0069,-0.0161,non-inferior,inconclusive,False
+Neural,vasopressor,2020 - 2022,0.0043,0.001,-0.0059,-0.0126,non-inferior,non-inferior,True
+Trees,intubation,2014 - 2016,-0.0126,-0.0146,-0.0251,-0.0267,inconclusive,inconclusive,True
+Trees,intubation,2017 - 2019,-0.0046,-0.0083,-0.0147,-0.0194,non-inferior,inconclusive,False
+Trees,intubation,2020 - 2022,-0.0138,-0.018,-0.0282,-0.0359,inconclusive,inconclusive,True
+Trees,vasopressor,2014 - 2016,-0.0002,0.0014,-0.0059,-0.0046,non-inferior,non-inferior,True
+Trees,vasopressor,2017 - 2019,0.0014,0.0018,-0.0037,-0.0038,non-inferior,non-inferior,True
+Trees,vasopressor,2020 - 2022,0.0044,0.01,-0.0037,0.0016,non-inferior,non-inferior,True

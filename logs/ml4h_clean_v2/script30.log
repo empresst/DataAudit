@@ -1,0 +1,91 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+==============================================================================
+MODULAR XGBOOST (clean-v2) — bounded vs full update in trees   <<< SHARE THIS BLOCK
+==============================================================================
+  cohort 2014 - 2016: train+replay=5223 es=1625 sel=1648
+  cohort 2017 - 2019: train+replay=6354 es=1790 sel=1832
+  cohort 2020 - 2022: train+replay=3249 es=640 sel=600
+  source vasopressor  val-ES incident AUROC 0.8662   head (b, wP, wT) = (-1.376, 0.706, 0.499)   [2.4 min]
+  source intubation   val-ES incident AUROC 0.7507   head (b, wP, wT) = (-0.848, 0.295, 0.742)   [4.1 min]
+  B_xgb         eta sweep {0.003: 0.7731, 0.01: 0.7728, 0.03: 0.773, 0.1: 0.7683, 0.3: 0.7693} → 0.003 (grid edge)   [4.3 min]
+  B_mirror_xgb  eta sweep {0.003: 0.7785, 0.01: 0.7809, 0.03: 0.7801, 0.1: 0.7823, 0.3: 0.7729} → 0.1   [4.6 min]
+  C_xgb         eta sweep {0.003: 0.7808, 0.01: 0.7863, 0.03: 0.7864, 0.1: 0.7874, 0.3: 0.7716} → 0.1   [5.8 min]
+  vasopressor  B_xgb done [6.8 min]
+  vasopressor  B_mirror_xgb done [7.0 min]
+  vasopressor  C_xgb done [8.0 min]
+  intubation   B_xgb done [8.6 min]
+  intubation   B_mirror_xgb done [8.7 min]
+  intubation   C_xgb done [9.6 min]
+
+==============================================================================
+INCIDENT AUROC, final models, mean ± SD over seeds
+==============================================================================
+
+vasopressor
+  source (val_calib)   events=  34   (probe / not powered)
+    A_xgb         0.8329 ± 0.0000
+    B_xgb         0.8387 ± 0.0013   gain vs A +0.0059
+    B_mirror_xgb  0.8248 ± 0.0055   gain vs A -0.0081
+    C_xgb         0.8312 ± 0.0068   gain vs A -0.0017
+    B_xgb − C_xgb              seed +0.0076 ± 0.0067 sign 5/5 | patient 95%[-0.0071,+0.0215] 90%lo -0.0051 → non-inferior
+    B_xgb − B_mirror_xgb       seed +0.0139 ± 0.0059 sign 5/5 | patient 95%[-0.0116,+0.0356] 90%lo -0.0059 → non-inferior
+  2014 - 2016          events= 227
+    A_xgb         0.8002 ± 0.0000
+    B_xgb         0.8035 ± 0.0011   gain vs A +0.0033
+    B_mirror_xgb  0.8005 ± 0.0015   gain vs A +0.0003
+    C_xgb         0.8021 ± 0.0029   gain vs A +0.0019
+    B_xgb − C_xgb              seed +0.0014 ± 0.0033 sign 4/5 | patient 95%[-0.0062,+0.0089] 90%lo -0.0046 → non-inferior
+    B_xgb − B_mirror_xgb       seed +0.0030 ± 0.0017 sign 4/5 | patient 95%[-0.0082,+0.0145] 90%lo -0.0059 → non-inferior
+  2017 - 2019          events= 284
+    A_xgb         0.8185 ± 0.0000
+    B_xgb         0.8254 ± 0.0009   gain vs A +0.0069
+    B_mirror_xgb  0.8255 ± 0.0026   gain vs A +0.0070
+    C_xgb         0.8236 ± 0.0022   gain vs A +0.0052
+    B_xgb − C_xgb              seed +0.0018 ± 0.0023 sign 4/5 | patient 95%[-0.0048,+0.0085] 90%lo -0.0038 → non-inferior
+    B_xgb − B_mirror_xgb       seed -0.0001 ± 0.0033 sign 3/5 | patient 95%[-0.0106,+0.0102] 90%lo -0.0094 → non-inferior
+  2020 - 2022          events= 121
+    A_xgb         0.7609 ± 0.0000
+    B_xgb         0.7857 ± 0.0010   gain vs A +0.0248
+    B_mirror_xgb  0.7688 ± 0.0023   gain vs A +0.0079
+    C_xgb         0.7757 ± 0.0023   gain vs A +0.0148
+    B_xgb − C_xgb              seed +0.0100 ± 0.0029 sign 5/5 | patient 95%[-0.0000,+0.0212] 90%lo +0.0016 → non-inferior
+    B_xgb − B_mirror_xgb       seed +0.0169 ± 0.0023 sign 5/5 | patient 95%[-0.0001,+0.0351] 90%lo +0.0021 → non-inferior
+
+intubation
+  source (val_calib)   events=  24   (probe / not powered)
+    A_xgb         0.8152 ± 0.0000
+    B_xgb         0.8195 ± 0.0011   gain vs A +0.0043
+    B_mirror_xgb  0.8156 ± 0.0082   gain vs A +0.0004
+    C_xgb         0.8122 ± 0.0174   gain vs A -0.0030
+    B_xgb − C_xgb              seed +0.0073 ± 0.0180 sign 3/5 | patient 95%[-0.0294,+0.0486] 90%lo -0.0240 → inconclusive
+    B_xgb − B_mirror_xgb       seed +0.0039 ± 0.0088 sign 4/5 | patient 95%[-0.0221,+0.0315] 90%lo -0.0187 → inconclusive
+  2014 - 2016          events= 156
+    A_xgb         0.7481 ± 0.0000
+    B_xgb         0.7559 ± 0.0021   gain vs A +0.0079
+    B_mirror_xgb  0.7592 ± 0.0024   gain vs A +0.0112
+    C_xgb         0.7706 ± 0.0041   gain vs A +0.0225
+    B_xgb − C_xgb              seed -0.0146 ± 0.0028 sign 0/5 | patient 95%[-0.0291,-0.0010] 90%lo -0.0267 → inconclusive
+    B_xgb − B_mirror_xgb       seed -0.0033 ± 0.0013 sign 0/5 | patient 95%[-0.0172,+0.0104] 90%lo -0.0153 → inconclusive
+  2017 - 2019          events= 139
+    A_xgb         0.7962 ± 0.0000
+    B_xgb         0.7981 ± 0.0005   gain vs A +0.0018
+    B_mirror_xgb  0.7973 ± 0.0041   gain vs A +0.0011
+    C_xgb         0.8063 ± 0.0037   gain vs A +0.0101
+    B_xgb − C_xgb              seed -0.0083 ± 0.0037 sign 0/5 | patient 95%[-0.0213,+0.0069] 90%lo -0.0194 → inconclusive
+    B_xgb − B_mirror_xgb       seed +0.0007 ± 0.0045 sign 3/5 | patient 95%[-0.0113,+0.0118] 90%lo -0.0093 → non-inferior
+  2020 - 2022          events=  69
+    A_xgb         0.7984 ± 0.0000
+    B_xgb         0.8081 ± 0.0010   gain vs A +0.0097
+    B_mirror_xgb  0.8137 ± 0.0075   gain vs A +0.0153
+    C_xgb         0.8261 ± 0.0066   gain vs A +0.0278
+    B_xgb − C_xgb              seed -0.0180 ± 0.0063 sign 0/5 | patient 95%[-0.0402,+0.0035] 90%lo -0.0359 → inconclusive
+    B_xgb − B_mirror_xgb       seed -0.0056 ± 0.0073 sign 1/5 | patient 95%[-0.0250,+0.0151] 90%lo -0.0222 → inconclusive
+
+  trees added per delta booster (median [min, max]):
+    B_xgb         598 [1, 1000] over 30 boosters
+    B_mirror_xgb  18 [1, 84] over 30 boosters
+    C_xgb         27 [1, 275] over 60 boosters
+
+  eta per arm: {'B_xgb': 0.003, 'B_mirror_xgb': 0.1, 'C_xgb': 0.1}   NI margin 0.015   wall time 14.1 min
+
+Saved → modular_xgboost_clean.json, per_era_predictions_modxgb.npz

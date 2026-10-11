@@ -1,0 +1,684 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+Device: cpu
+FORCE_ADAPT = True
+PIN_SPLIT: cohorts pinned to ./pin_split_v2.json
+
+Feature configuration: 51 physio + 49 treatment = 100 channels
+ABLATE_LEAKY_PHYSIO = False  → run again with True and report the ablation
+
+Loading data...
+✅ Val temporal integrity confirmed: {'2011 - 2013'}
+seq_dim=51 treat_dim=49
+Source-era val: 2721 stays for early stopping / selection, 1463 stays held clean for drift reference + retention
+
+======================================================================
+PHASE 1: Source ensemble (5 seeds)
+======================================================================
+
+--- Source seed 42 ---
+  SRC-s42 Ep  1 | tL=0.2478 vL=0.2161 AUROC=['0.867', '0.946'] *
+  SRC-s42 Ep  2 | tL=0.2157 vL=0.2116 AUROC=['0.876', '0.948'] *
+  SRC-s42 Ep  3 | tL=0.2076 vL=0.2060 AUROC=['0.885', '0.949'] *
+  SRC-s42 Ep  4 | tL=0.2025 vL=0.2049 AUROC=['0.884', '0.949'] *
+  SRC-s42 Ep  5 | tL=0.1984 vL=0.2010 AUROC=['0.886', '0.952'] *
+  SRC-s42 Ep 10 | tL=0.1738 vL=0.2168 AUROC=['0.882', '0.948'] 
+  SRC-s42 Early stop at ep 13
+
+--- Source seed 123 ---
+  SRC-s123 Ep  1 | tL=0.2482 vL=0.2134 AUROC=['0.874', '0.945'] *
+  SRC-s123 Ep  2 | tL=0.2151 vL=0.2077 AUROC=['0.884', '0.950'] *
+  SRC-s123 Ep  3 | tL=0.2078 vL=0.2020 AUROC=['0.886', '0.952'] *
+  SRC-s123 Ep  5 | tL=0.1974 vL=0.2062 AUROC=['0.885', '0.950'] 
+  SRC-s123 Ep 10 | tL=0.1742 vL=0.2077 AUROC=['0.887', '0.950'] 
+  SRC-s123 Early stop at ep 11
+
+--- Source seed 7 ---
+  SRC-s7 Ep  1 | tL=0.2441 vL=0.2239 AUROC=['0.868', '0.941'] *
+  SRC-s7 Ep  2 | tL=0.2153 vL=0.2067 AUROC=['0.883', '0.949'] *
+  SRC-s7 Ep  3 | tL=0.2072 vL=0.2058 AUROC=['0.885', '0.949'] *
+  SRC-s7 Ep  5 | tL=0.1970 vL=0.2058 AUROC=['0.889', '0.949'] *
+  SRC-s7 Ep 10 | tL=0.1747 vL=0.2144 AUROC=['0.882', '0.948'] 
+  SRC-s7 Early stop at ep 13
+
+--- Source seed 2024 ---
+  SRC-s2024 Ep  1 | tL=0.2482 vL=0.2172 AUROC=['0.872', '0.943'] *
+  SRC-s2024 Ep  2 | tL=0.2173 vL=0.2136 AUROC=['0.878', '0.947'] *
+  SRC-s2024 Ep  3 | tL=0.2086 vL=0.2083 AUROC=['0.883', '0.948'] *
+  SRC-s2024 Ep  4 | tL=0.2020 vL=0.2057 AUROC=['0.883', '0.950'] *
+  SRC-s2024 Ep  5 | tL=0.1982 vL=0.2084 AUROC=['0.882', '0.950'] 
+  SRC-s2024 Ep  6 | tL=0.1949 vL=0.2041 AUROC=['0.886', '0.950'] *
+  SRC-s2024 Ep 10 | tL=0.1787 vL=0.2215 AUROC=['0.876', '0.949'] 
+  SRC-s2024 Early stop at ep 14
+
+--- Source seed 99 ---
+  SRC-s99 Ep  1 | tL=0.2507 vL=0.2174 AUROC=['0.867', '0.945'] *
+  SRC-s99 Ep  2 | tL=0.2158 vL=0.2087 AUROC=['0.880', '0.950'] *
+  SRC-s99 Ep  3 | tL=0.2069 vL=0.2079 AUROC=['0.881', '0.950'] *
+  SRC-s99 Ep  4 | tL=0.2001 vL=0.2034 AUROC=['0.887', '0.951'] *
+  SRC-s99 Ep  5 | tL=0.1980 vL=0.2052 AUROC=['0.886', '0.951'] 
+  SRC-s99 Ep  7 | tL=0.1882 vL=0.2033 AUROC=['0.887', '0.950'] *
+  SRC-s99 Ep 10 | tL=0.1720 vL=0.2158 AUROC=['0.878', '0.951'] 
+  SRC-s99 Ep 15 | tL=0.1550 vL=0.2418 AUROC=['0.870', '0.951'] 
+  SRC-s99 Early stop at ep 15
+
+Canonical source: seed 99 (val_es selection score=0.7931)
+
+Adaptable parameters per arm:
+  B          13,698
+  B_mirror   63,360
+  C          77,058
+  C_l2sp     77,058
+  (Run D in script3 is capacity-matched to Run B via solve_head_hidden)
+PIN_SPLIT: 16580 adapt / 15742 eval subjects (0 test subjects in neither)
+
+Chronological cohort assignment (earliest → adapt, latest → evaluate):
+  2014 - 2016    adapt years [2014, 2015]  →  eval years [2015, 2016]
+  2017 - 2019    adapt years [2017, 2018]  →  eval years [2018, 2019]
+  2020 - 2022    adapt years [2020, 2021]  →  eval years [2021, 2022]
+  2014 - 2016: 6727 detection / 6727 eval subjects
+  2017 - 2019: 7320 detection / 7412 eval subjects
+  2020 - 2022: 3194 detection / 2474 eval subjects
+  1464/32322 test-era subjects have stays in more than one era group; each is assigned to a single cohort globally.
+
+Temporal separation audit (adaptation must precede evaluation):
+  2014 - 2016    last adapt year=2016 | 69.8% of eval stays strictly earlier (5813/8328)
+  2017 - 2019    last adapt year=2019 | 72.4% of eval stays strictly earlier (6852/9470)
+  2020 - 2022    last adapt year=2022 | 89.6% of eval stays strictly earlier (2779/3101)
+  Non-zero values come from year-resolution ties and multi-era patients — MIMIC-IV
+  date-shifts per patient, so finer-grained ordering is not recoverable. Report
+  this table rather than claiming strict chronological separation.
+
+======================================================================
+PHASE 2b: Drift detection
+======================================================================
+
+Monitored channels: 40 treatment continuous + 7 treatment binary | 51 physiology
+
+Stage-2 calibration on 4 train-era years [2009, 2010, 2011, 2012]:
+  treatment   rolling ratios [5.67, 0.79, 5.02] → threshold 5.67
+  physiology  rolling ratios [4.22, 0.92, 3.86] → threshold 4.22
+
+Performance-branch reference (val_calib — clean source-era split):
+  label_vasopressor        AUROC=0.8878 SE=0.0119 → threshold=0.0239
+  label_intubation         AUROC=0.9575 SE=0.0054 → threshold=0.0200
+  MIN_PERF_DROPS=2 of 2 active labels.
+
+--- Detection log (ratios are multiples of the worst train-era year-to-year shift) ---
+  2011 - 2013 → 2014 - 2016    treat x 0.70   -  (n=30) | physio x 1.70 FIRE (n=12) | oracle ΔAUROC=-0.0004 (  - , 0/3)
+  2014 - 2016 → 2017 - 2019    treat x 1.15 FIRE (n=29) | physio x 0.92   -  (n=15) | oracle ΔAUROC=-0.0007 (  - , 0/3)
+  2017 - 2019 → 2020 - 2022    treat x 0.34   -  (n= 9) | physio x 0.50   -  (n= 9) | oracle ΔAUROC=-0.0018 (  - , 0/3)
+  Gate = ('distribution',). The oracle branch needs h8-h14 outcomes and is
+  reported as a validation of the label-free gate, not as a trigger.
+
+  ⚠ PHYSIOLOGY GATE FIRED. The freeze premise — that the physiological
+    representation is stable enough to hold fixed — is violated at the
+    boundaries above. Configured action: flag.
+
+Gate vs oracle over 3 boundaries: agree 2, gate-only 1, oracle-only 0
+
+✅ Drift onset (reporting changepoint): 2017 - 2019 | branches: distribution | rule: argmax
+
+════════════════════════════════════════════════════════════
+DRIFT EXPLAINABILITY — Feature-level analysis
+════════════════════════════════════════════════════════════
+
+======================================================================
+DETAILED DRIFT ANALYSIS & EXPLANATION
+======================================================================
+🚨 CLINICAL PRACTICE SHIFT DETECTED
+Between the training period (2014-2016) and the new data (2020-2022), patient treatment patterns have changed significantly.
+The model will now trigger an adaptation phase to account for these shifts.
+
+Key clinical changes driving this update:
+• Urine Output Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Urine Output Ml Kg Hr Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Total Crystalloid Ml: Average value decreased from 908.82 to 639.82 (Severe Drift PSI: 0.10)
+• Lactate Time Delta Mean: Average value decreased from 2.24 to 2.11 (Severe Drift PSI: 0.07)
+• Central Line: Usage dropped by 5.9% in the newer data.
+
+  physio observed-value PSI: 51 features, 47 exceed their own train-era null (max PSI 0.303703, median 0.011868)
+    exceeding: ['heart_rate', 'sbp_noninvasive', 'dbp_noninvasive', 'sbp_invasive', 'dbp_invasive', 'map_invasive', 'temperature_c', 'spo2']
+
+  Spearman stability: 40 features, 780 pairs
+    pairwise mean|Δρ| 0.016974 (train-era null p95 0.004848)   ← EXCEEDS null
+    structure similarity 0.988449 (null p05 0.999124)
+    label_vasopressor      mean|Δρ(feature,label)| 0.026864, 0 sign flips
+    label_intubation       mean|Δρ(feature,label)| 0.029959, 0 sign flips
+    Marginal PSI stability says NOTHING about these numbers. If the
+    pairwise structure holds but outcome associations move, say so — the
+    labels ARE treatment decisions, so that is the expected direction.
+PIN_SPLIT: evaluation cohorts match the pinned split
+
+Evaluation eras (held permanently in the evaluation): ['source (val_calib)', '2014 - 2016', '2017 - 2019', '2020 - 2022']
+  source (val_calib)       1463 stays
+  2014 - 2016              8328 stays
+  2017 - 2019              9470 stays
+  2020 - 2022              3101 stays
+
+Eras with a usable detection cohort: ['2014 - 2016', '2017 - 2019', '2020 - 2022']
+Adapt/no-adapt is decided inside the walk-forward loop, against the data
+the deployed model has been trained on so far — not precomputed here.
+
+======================================================================
+PHASE 3: Sequential adaptation
+======================================================================
+
+--- Step 0: source model, no adaptation (reference row) ---
+  source (val_calib)     vasopressor=0.890  intubation=0.958
+  2014 - 2016            vasopressor=0.873  intubation=0.959
+  2017 - 2019            vasopressor=0.880  intubation=0.967
+  2020 - 2022            vasopressor=0.862  intubation=0.962
+
+======================================================================
+STEP 1: era 2014 - 2016
+======================================================================
+  detector vs [source training era]  (n_ref=24428, n_cur=8496)
+    treatment  x 0.90 of the worst train-era year shift (30 features)  quiet
+    physiology x 1.95 (13 features)  FIRE
+    ⚠ FREEZE PREMISE VIOLATED — physiology has moved beyond the
+      variation the model was trained through. Action: flag  → logged only; Run B keeps its freeze.
+    oracle ΔAUROC (current deployed weights): B=+0.0011(0/2)
+  → UPDATE 1 triggered.
+  train=5223 (incl. 0 replay from 0 earlier era(s)) | val-ES=1625 | val-SEL=1648
+
+  LR sweep on val-SEL: [3e-05, 0.0001, 0.0003, 0.001, 0.003] (each arm at its own best)
+    B          new-era 3e-05:0.7738 0.0001:0.7735 0.0003:0.7854 0.001:0.7915 0.003:0.8039  → 0.003
+               old-era 3e-05:0.7985 0.0001:0.7956 0.0003:0.7869 0.001:0.7872 0.003:0.7815
+    B_mirror   new-era 3e-05:0.7472 0.0001:0.7460 0.0003:0.7435 0.001:0.7521 0.003:0.7733  → 0.003
+               old-era 3e-05:0.7971 0.0001:0.7971 0.0003:0.7962 0.001:0.8015 0.003:0.8067
+    C          new-era 3e-05:0.7593 0.0001:0.7596 0.0003:0.7676 0.001:0.7646 0.003:0.7586  → 0.0003
+               old-era 3e-05:0.7973 0.0001:0.7968 0.0003:0.7959 0.001:0.7890 0.003:0.7829
+    C_l2sp     new-era 3e-05:0.7625 0.0001:0.7618 0.0003:0.7650 0.001:0.7591 0.003:0.7572  → 0.0003
+               old-era 3e-05:0.7974 0.0001:0.7989 0.0003:0.7960 0.001:0.7894 0.003:0.7956
+
+    Retention sensitivity to the LR rule (old-era AUROC; source model = 0.7922):
+      B          selected lr=0.003 → 0.7815   ⚠ retention would be +0.0170 better at lr=3e-05
+      B_mirror   selected lr=0.003 → 0.8067
+      C          selected lr=0.0003 → 0.7959   ⚠ retention would be +0.0014 better at lr=3e-05
+      C_l2sp     selected lr=0.0003 → 0.7960   ⚠ retention would be +0.0029 better at lr=0.0001
+      Quote the whole grid, not just the selected column. The claim to
+      defend is 'C retains less than B at every LR', which needs no rule.
+
+  B: two-stream, physio frozen (main claim) @ lr=0.003
+    seeds [42, 123, 7, 2024, 99] → [0.8039, 0.8016, 0.7872, 0.8066, 0.7974] | canonical = seed 123
+
+  B_mirror: two-stream, treat+fusion frozen (mirror control) @ lr=0.003
+    seeds [42, 123, 7, 2024, 99] → [0.7733, 0.7389, 0.7414, 0.7711, 0.7334] | canonical = seed 7
+
+  C: two-stream, full fine-tune @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.7676, 0.7654, 0.7672, 0.7717, 0.7723] | canonical = seed 42
+
+  C_l2sp: two-stream, full fine-tune + L2-SP anchor to source @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.765, 0.7674, 0.7631, 0.7664, 0.7653] | canonical = seed 99
+  reference window → update-1 training mixture (2014 - 2016 + replay), n=5223 stays
+
+  --- After adapting at 2014 - 2016: AUROC on every era ---
+  vasopressor:
+    A          source (v=0.890  2014 - 20=0.873  2017 - 20=0.880  2020 - 20=0.862
+    B          source (v=0.882  2014 - 20=0.875  2017 - 20=0.887  2020 - 20=0.870
+    B_mirror   source (v=0.896  2014 - 20=0.873  2017 - 20=0.883  2020 - 20=0.870
+    C          source (v=0.894  2014 - 20=0.878  2017 - 20=0.888  2020 - 20=0.872
+    C_l2sp     source (v=0.892  2014 - 20=0.877  2017 - 20=0.887  2020 - 20=0.871
+  intubation:
+    A          source (v=0.958  2014 - 20=0.959  2017 - 20=0.967  2020 - 20=0.962
+    B          source (v=0.959  2014 - 20=0.958  2017 - 20=0.965  2020 - 20=0.963
+    B_mirror   source (v=0.958  2014 - 20=0.960  2017 - 20=0.969  2020 - 20=0.963
+    C          source (v=0.960  2014 - 20=0.962  2017 - 20=0.970  2020 - 20=0.966
+    C_l2sp     source (v=0.960  2014 - 20=0.962  2017 - 20=0.969  2020 - 20=0.965
+
+======================================================================
+STEP 2: era 2017 - 2019
+======================================================================
+  detector vs [update-1 training mixture (2014 - 2016 + replay)]  (n_ref=5223, n_cur=9476)
+    treatment  x 0.78 of the worst train-era year shift (23 features)  quiet
+    physiology x 3.33 (26 features)  FIRE
+    ⚠ FREEZE PREMISE VIOLATED — physiology has moved beyond the
+      variation the model was trained through. Action: flag  → logged only; Run B keeps its freeze.
+    oracle ΔAUROC (current deployed weights): B=-0.0019(0/2)
+  → UPDATE 2 triggered.
+  train=6354 (incl. 500 replay from 1 earlier era(s)) | val-ES=1790 | val-SEL=1832
+
+  B: two-stream, physio frozen (main claim) @ lr=0.003
+    seeds [42, 123, 7, 2024, 99] → [0.8018, 0.7894, 0.799, 0.8021, 0.801] | canonical = seed 99
+
+  B_mirror: two-stream, treat+fusion frozen (mirror control) @ lr=0.003
+    seeds [42, 123, 7, 2024, 99] → [0.7822, 0.7948, 0.7953, 0.7899, 0.795] | canonical = seed 123
+
+  C: two-stream, full fine-tune @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.792, 0.7953, 0.7956, 0.7964, 0.8015] | canonical = seed 7
+
+  C_l2sp: two-stream, full fine-tune + L2-SP anchor to source @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.7909, 0.7901, 0.7899, 0.7883, 0.792] | canonical = seed 123
+  reference window → update-2 training mixture (2017 - 2019 + replay), n=6354 stays
+
+  --- After adapting at 2017 - 2019: AUROC on every era ---
+  vasopressor:
+    A          source (v=0.890  2014 - 20=0.873  2017 - 20=0.880  2020 - 20=0.862
+    B          source (v=0.888  2014 - 20=0.878  2017 - 20=0.892  2020 - 20=0.875
+    B_mirror   source (v=0.898  2014 - 20=0.876  2017 - 20=0.888  2020 - 20=0.873
+    C          source (v=0.894  2014 - 20=0.881  2017 - 20=0.892  2020 - 20=0.876
+    C_l2sp     source (v=0.894  2014 - 20=0.879  2017 - 20=0.890  2020 - 20=0.873
+  intubation:
+    A          source (v=0.958  2014 - 20=0.959  2017 - 20=0.967  2020 - 20=0.962
+    B          source (v=0.959  2014 - 20=0.961  2017 - 20=0.969  2020 - 20=0.966
+    B_mirror   source (v=0.961  2014 - 20=0.960  2017 - 20=0.969  2020 - 20=0.966
+    C          source (v=0.962  2014 - 20=0.962  2017 - 20=0.970  2020 - 20=0.967
+    C_l2sp     source (v=0.961  2014 - 20=0.961  2017 - 20=0.969  2020 - 20=0.966
+
+======================================================================
+STEP 3: era 2020 - 2022
+======================================================================
+  detector vs [update-2 training mixture (2017 - 2019 + replay)]  (n_ref=6354, n_cur=3990)
+    treatment  x 0.49 of the worst train-era year shift (9 features)  quiet
+    physiology x 2.14 (33 features)  FIRE
+    ⚠ FREEZE PREMISE VIOLATED — physiology has moved beyond the
+      variation the model was trained through. Action: flag  → logged only; Run B keeps its freeze.
+    oracle ΔAUROC (current deployed weights): B=-0.0045(0/2)
+  → UPDATE 3 triggered.
+  train=3249 (incl. 499 replay from 2 earlier era(s)) | val-ES=640 | val-SEL=600
+
+  B: two-stream, physio frozen (main claim) @ lr=0.003
+    seeds [42, 123, 7, 2024, 99] → [0.7722, 0.7816, 0.775, 0.7904, 0.775] | canonical = seed 7
+
+  B_mirror: two-stream, treat+fusion frozen (mirror control) @ lr=0.003
+    seeds [42, 123, 7, 2024, 99] → [0.8023, 0.7758, 0.7864, 0.7731, 0.7708] | canonical = seed 123
+
+  C: two-stream, full fine-tune @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8002, 0.8017, 0.8072, 0.8052, 0.8048] | canonical = seed 99
+
+  C_l2sp: two-stream, full fine-tune + L2-SP anchor to source @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8158, 0.8186, 0.7959, 0.8089, 0.8148] | canonical = seed 99
+  reference window → update-3 training mixture (2020 - 2022 + replay), n=3249 stays
+
+  --- After adapting at 2020 - 2022: AUROC on every era ---
+  vasopressor:
+    A          source (v=0.890  2014 - 20=0.873  2017 - 20=0.880  2020 - 20=0.862
+    B          source (v=0.883  2014 - 20=0.878  2017 - 20=0.891  2020 - 20=0.877
+    B_mirror   source (v=0.889  2014 - 20=0.873  2017 - 20=0.889  2020 - 20=0.874
+    C          source (v=0.893  2014 - 20=0.882  2017 - 20=0.895  2020 - 20=0.881
+    C_l2sp     source (v=0.892  2014 - 20=0.880  2017 - 20=0.893  2020 - 20=0.877
+  intubation:
+    A          source (v=0.958  2014 - 20=0.959  2017 - 20=0.967  2020 - 20=0.962
+    B          source (v=0.960  2014 - 20=0.961  2017 - 20=0.968  2020 - 20=0.964
+    B_mirror   source (v=0.957  2014 - 20=0.959  2017 - 20=0.968  2020 - 20=0.965
+    C          source (v=0.962  2014 - 20=0.963  2017 - 20=0.971  2020 - 20=0.967
+    C_l2sp     source (v=0.961  2014 - 20=0.962  2017 - 20=0.969  2020 - 20=0.965
+
+======================================================================
+CLOSED-LOOP DETECTION SUMMARY
+======================================================================
+  era                 n  treat x  physio x  action      oracle
+  2014 - 2016      8496     0.90      1.95  UPDATE      agrees
+  2017 - 2019      9476     0.78      3.33  UPDATE      agrees
+  2020 - 2022      3990     0.49      2.14  UPDATE      agrees
+
+  updates: 3/3 eras  → ['2014 - 2016', '2017 - 2019', '2020 - 2022']
+  cadence: 1.00 updates/era, mean gap 1.0 eras
+  missed updates (oracle saw degradation, label-free gate did not): 0
+  Ratios are multiples of the largest year-to-year shift inside the training
+  era, measured against the data the deployed model was trained on. A ratio
+  that FALLS after an update is the update working; one that stays high is
+  drift the update did not absorb. Both belong in the paper.
+
+======================================================================
+PHASE 4: Retention matrix and forgetting
+======================================================================
+
+### vasopressor — AUROC by era after each adaptation step
+
+  Run A   ACC=0.8760   BWT=+0.0000   [never adapted — reference line]
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8895              0.8732              0.8797              0.8616
+  2014 - 2016                       0.8895              0.8732              0.8797              0.8616
+  2017 - 2019                       0.8895              0.8732              0.8797              0.8616
+  2020 - 2022                       0.8895              0.8732              0.8797              0.8616
+
+  Run B   ACC=0.8823   BWT=+0.0008
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8895              0.8732              0.8797              0.8616
+  2014 - 2016                       0.8823              0.8755              0.8868              0.8700
+  2017 - 2019                       0.8882              0.8783              0.8922              0.8752
+  2020 - 2022                       0.8832              0.8777              0.8915              0.8767
+
+  Run B_mirror   ACC=0.8814   BWT=+0.0007
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8895              0.8732              0.8797              0.8616
+  2014 - 2016                       0.8963              0.8732              0.8830              0.8699
+  2017 - 2019                       0.8980              0.8756              0.8877              0.8727
+  2020 - 2022                       0.8890              0.8734              0.8889              0.8741
+
+  Run C   ACC=0.8877   BWT=+0.0035
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8895              0.8732              0.8797              0.8616
+  2014 - 2016                       0.8943              0.8782              0.8885              0.8719
+  2017 - 2019                       0.8935              0.8806              0.8915              0.8764
+  2020 - 2022                       0.8929              0.8821              0.8946              0.8811
+
+  Run C_l2sp   ACC=0.8856   BWT=+0.0026
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8895              0.8732              0.8797              0.8616
+  2014 - 2016                       0.8921              0.8774              0.8871              0.8715
+  2017 - 2019                       0.8943              0.8794              0.8904              0.8727
+  2020 - 2022                       0.8924              0.8802              0.8928              0.8771
+
+### intubation — AUROC by era after each adaptation step
+
+  Run A   ACC=0.9615   BWT=+0.0000   [never adapted — reference line]
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.9578              0.9591              0.9666              0.9625
+  2014 - 2016                       0.9578              0.9591              0.9666              0.9625
+  2017 - 2019                       0.9578              0.9591              0.9666              0.9625
+  2020 - 2022                       0.9578              0.9591              0.9666              0.9625
+
+  Run B   ACC=0.9633   BWT=+0.0008
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.9578              0.9591              0.9666              0.9625
+  2014 - 2016                       0.9588              0.9583              0.9653              0.9629
+  2017 - 2019                       0.9594              0.9610              0.9689              0.9656
+  2020 - 2022                       0.9599              0.9606              0.9683              0.9644
+
+  Run B_mirror   ACC=0.9621   BWT=-0.0011
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.9578              0.9591              0.9666              0.9625
+  2014 - 2016                       0.9583              0.9596              0.9688              0.9632
+  2017 - 2019                       0.9607              0.9599              0.9692              0.9658
+  2020 - 2022                       0.9569              0.9588              0.9678              0.9649
+
+  Run C   ACC=0.9656   BWT=+0.0008
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.9578              0.9591              0.9666              0.9625
+  2014 - 2016                       0.9601              0.9618              0.9697              0.9659
+  2017 - 2019                       0.9616              0.9623              0.9703              0.9667
+  2020 - 2022                       0.9618              0.9630              0.9707              0.9670
+
+  Run C_l2sp   ACC=0.9642   BWT=+0.0001
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.9578              0.9591              0.9666              0.9625
+  2014 - 2016                       0.9599              0.9615              0.9688              0.9653
+  2017 - 2019                       0.9608              0.9613              0.9693              0.9659
+  2020 - 2022                       0.9607              0.9617              0.9693              0.9653
+
+  ACC = mean AUROC across all eras after the final step.
+  BWT = mean change on EARLIER eras between when they were current and now.
+        Negative = forgetting. This is the two-stream claim: B should have
+        BWT closer to zero than C, at comparable ACC.
+
+--- Headline: ACC vs BWT (per label, per arm) ---
+
+  vasopressor
+    arm                ACC       BWT
+    A               0.8760   +0.0000
+    B               0.8823   +0.0008
+    B_mirror        0.8814   +0.0007
+    C               0.8877   +0.0035
+    C_l2sp          0.8856   +0.0026
+
+  intubation
+    arm                ACC       BWT
+    A               0.9615   +0.0000
+    B               0.9633   +0.0008
+    B_mirror        0.9621   -0.0011
+    C               0.9656   +0.0008
+    C_l2sp          0.9642   +0.0001
+
+======================================================================
+PHASE 5: Paired bootstrap comparisons
+======================================================================
+Run A never sees adaptation data, so B > A only shows in-domain training
+helps. The defended claims are B vs C, B vs C_l2sp, and B vs B_mirror.
+
+--- Era source (val_calib)  [source era] ---
+    vasopressor             B − C        overall    Δ=-0.0097 [-0.0162, -0.0038] → C
+    vasopressor             B − C_l2sp   overall    Δ=-0.0091 [-0.0151, -0.0031] → C_l2sp
+    vasopressor             B − B_mirror overall    Δ=-0.0058 [-0.0171, +0.0030] → tie
+    vasopressor             B − A        overall    Δ=-0.0063 [-0.0152, +0.0030] → tie
+    vasopressor             C − A        overall    Δ=+0.0034 [-0.0047, +0.0131] → tie
+    vasopressor        C_l2sp − C        overall    Δ=-0.0006 [-0.0044, +0.0029] → tie
+    vasopressor      B_mirror − C        overall    Δ=-0.0039 [-0.0112, +0.0048] → tie
+    vasopressor      B_mirror − C_l2sp   overall    Δ=-0.0033 [-0.0108, +0.0061] → tie
+    vasopressor      B_mirror − A        overall    Δ=-0.0005 [-0.0104, +0.0116] → tie
+    vasopressor             B − C        incident   Δ=-0.0265 [-0.0634, -0.0053] → C
+    vasopressor             B − C_l2sp   incident   Δ=-0.0223 [-0.0502, -0.0027] → C_l2sp
+    vasopressor             B − B_mirror incident   Δ=-0.0412 [-0.1074, -0.0050] → B_mirror
+    vasopressor             B − A        incident   Δ=-0.0323 [-0.0693, +0.0001] → tie
+    vasopressor             C − A        incident   Δ=-0.0058 [-0.0336, +0.0165] → tie
+    vasopressor        C_l2sp − C        incident   Δ=-0.0041 [-0.0187, +0.0054] → tie
+    vasopressor      B_mirror − C        incident   Δ=+0.0148 [-0.0127, +0.0517] → tie
+    vasopressor      B_mirror − C_l2sp   incident   Δ=+0.0189 [-0.0080, +0.0626] → tie
+    vasopressor      B_mirror − A        incident   Δ=+0.0090 [-0.0218, +0.0456] → tie
+    intubation              B − C        overall    Δ=-0.0018 [-0.0049, +0.0016] → tie
+    intubation              B − C_l2sp   overall    Δ=-0.0007 [-0.0043, +0.0036] → tie
+    intubation              B − B_mirror overall    Δ=+0.0031 [-0.0023, +0.0085] → tie
+    intubation              B − A        overall    Δ=+0.0022 [-0.0025, +0.0091] → tie
+    intubation              C − A        overall    Δ=+0.0040 [+0.0009, +0.0090] → C
+    intubation         C_l2sp − C        overall    Δ=-0.0011 [-0.0035, +0.0004] → tie
+    intubation       B_mirror − C        overall    Δ=-0.0049 [-0.0084, -0.0017] → C
+    intubation       B_mirror − C_l2sp   overall    Δ=-0.0038 [-0.0070, -0.0006] → C_l2sp
+    intubation       B_mirror − A        overall    Δ=-0.0009 [-0.0049, +0.0030] → tie
+    intubation              B − C        incident   Δ=-0.0066 [-0.0433, +0.0207] → tie
+    intubation              B − C_l2sp   incident   Δ=-0.0022 [-0.0422, +0.0350] → tie
+    intubation              B − B_mirror incident   Δ=+0.0056 [-0.0473, +0.0584] → tie
+    intubation              B − A        incident   Δ=+0.0034 [-0.0453, +0.0766] → tie
+    intubation              C − A        incident   Δ=+0.0100 [-0.0221, +0.0926] → tie
+    intubation         C_l2sp − C        incident   Δ=-0.0043 [-0.0466, +0.0105] → tie
+    intubation       B_mirror − C        incident   Δ=-0.0121 [-0.0596, +0.0179] → tie
+    intubation       B_mirror − C_l2sp   incident   Δ=-0.0078 [-0.0336, +0.0188] → tie
+    intubation       B_mirror − A        incident   Δ=-0.0022 [-0.0415, +0.0338] → tie
+
+--- Era 2014 - 2016  [earlier era (retention)] ---
+    vasopressor             B − C        overall    Δ=-0.0044 [-0.0073, -0.0018] → C
+    vasopressor             B − C_l2sp   overall    Δ=-0.0025 [-0.0053, +0.0001] → tie
+    vasopressor             B − B_mirror overall    Δ=+0.0043 [+0.0002, +0.0088] → B
+    vasopressor             B − A        overall    Δ=+0.0045 [+0.0005, +0.0083] → B
+    vasopressor             C − A        overall    Δ=+0.0089 [+0.0055, +0.0126] → C
+    vasopressor        C_l2sp − C        overall    Δ=-0.0019 [-0.0036, -0.0005] → C
+    vasopressor      B_mirror − C        overall    Δ=-0.0087 [-0.0120, -0.0057] → C
+    vasopressor      B_mirror − C_l2sp   overall    Δ=-0.0068 [-0.0103, -0.0036] → C_l2sp
+    vasopressor      B_mirror − A        overall    Δ=+0.0002 [-0.0042, +0.0046] → tie
+    vasopressor             B − C        incident   Δ=+0.0022 [-0.0069, +0.0119] → tie
+    vasopressor             B − C_l2sp   incident   Δ=+0.0050 [-0.0049, +0.0160] → tie
+    vasopressor             B − B_mirror incident   Δ=+0.0193 [+0.0029, +0.0337] → B
+    vasopressor             B − A        incident   Δ=+0.0162 [+0.0015, +0.0314] → B
+    vasopressor             C − A        incident   Δ=+0.0140 [+0.0032, +0.0254] → C
+    vasopressor        C_l2sp − C        incident   Δ=-0.0027 [-0.0077, +0.0020] → tie
+    vasopressor      B_mirror − C        incident   Δ=-0.0170 [-0.0298, -0.0047] → C
+    vasopressor      B_mirror − C_l2sp   incident   Δ=-0.0143 [-0.0272, -0.0010] → C_l2sp
+    vasopressor      B_mirror − A        incident   Δ=-0.0030 [-0.0183, +0.0138] → tie
+    intubation              B − C        overall    Δ=-0.0024 [-0.0040, -0.0008] → C
+    intubation              B − C_l2sp   overall    Δ=-0.0011 [-0.0026, +0.0007] → tie
+    intubation              B − B_mirror overall    Δ=+0.0018 [-0.0002, +0.0040] → tie
+    intubation              B − A        overall    Δ=+0.0015 [-0.0005, +0.0035] → tie
+    intubation              C − A        overall    Δ=+0.0039 [+0.0025, +0.0054] → C
+    intubation         C_l2sp − C        overall    Δ=-0.0013 [-0.0022, -0.0007] → C
+    intubation       B_mirror − C        overall    Δ=-0.0042 [-0.0058, -0.0028] → C
+    intubation       B_mirror − C_l2sp   overall    Δ=-0.0029 [-0.0045, -0.0015] → C_l2sp
+    intubation       B_mirror − A        overall    Δ=-0.0003 [-0.0020, +0.0012] → tie
+    intubation              B − C        incident   Δ=-0.0043 [-0.0268, +0.0217] → tie
+    intubation              B − C_l2sp   incident   Δ=+0.0049 [-0.0183, +0.0307] → tie
+    intubation              B − B_mirror incident   Δ=+0.0180 [-0.0107, +0.0531] → tie
+    intubation              B − A        incident   Δ=+0.0189 [-0.0065, +0.0524] → tie
+    intubation              C − A        incident   Δ=+0.0232 [+0.0080, +0.0404] → C
+    intubation         C_l2sp − C        incident   Δ=-0.0092 [-0.0189, -0.0008] → C
+    intubation       B_mirror − C        incident   Δ=-0.0223 [-0.0418, -0.0032] → C
+    intubation       B_mirror − C_l2sp   incident   Δ=-0.0131 [-0.0319, +0.0050] → tie
+    intubation       B_mirror − A        incident   Δ=+0.0009 [-0.0184, +0.0190] → tie
+
+--- Era 2017 - 2019  [earlier era (retention)] ---
+    vasopressor             B − C        overall    Δ=-0.0031 [-0.0055, -0.0006] → C
+    vasopressor             B − C_l2sp   overall    Δ=-0.0013 [-0.0038, +0.0011] → tie
+    vasopressor             B − B_mirror overall    Δ=+0.0026 [-0.0013, +0.0066] → tie
+    vasopressor             B − A        overall    Δ=+0.0118 [+0.0077, +0.0153] → B
+    vasopressor             C − A        overall    Δ=+0.0149 [+0.0115, +0.0182] → C
+    vasopressor        C_l2sp − C        overall    Δ=-0.0018 [-0.0032, -0.0005] → C
+    vasopressor      B_mirror − C        overall    Δ=-0.0057 [-0.0088, -0.0026] → C
+    vasopressor      B_mirror − C_l2sp   overall    Δ=-0.0039 [-0.0068, -0.0007] → C_l2sp
+    vasopressor      B_mirror − A        overall    Δ=+0.0092 [+0.0052, +0.0134] → B_mirror
+    vasopressor             B − C        incident   Δ=-0.0066 [-0.0163, +0.0015] → tie
+    vasopressor             B − C_l2sp   incident   Δ=-0.0026 [-0.0123, +0.0067] → tie
+    vasopressor             B − B_mirror incident   Δ=+0.0035 [-0.0117, +0.0177] → tie
+    vasopressor             B − A        incident   Δ=+0.0179 [+0.0033, +0.0327] → B
+    vasopressor             C − A        incident   Δ=+0.0245 [+0.0123, +0.0382] → C
+    vasopressor        C_l2sp − C        incident   Δ=-0.0040 [-0.0098, +0.0010] → tie
+    vasopressor      B_mirror − C        incident   Δ=-0.0102 [-0.0220, +0.0021] → tie
+    vasopressor      B_mirror − C_l2sp   incident   Δ=-0.0062 [-0.0171, +0.0050] → tie
+    vasopressor      B_mirror − A        incident   Δ=+0.0144 [+0.0005, +0.0294] → B_mirror
+    intubation              B − C        overall    Δ=-0.0024 [-0.0036, -0.0012] → C
+    intubation              B − C_l2sp   overall    Δ=-0.0010 [-0.0023, +0.0001] → tie
+    intubation              B − B_mirror overall    Δ=+0.0005 [-0.0011, +0.0022] → tie
+    intubation              B − A        overall    Δ=+0.0017 [-0.0001, +0.0032] → tie
+    intubation              C − A        overall    Δ=+0.0041 [+0.0028, +0.0054] → C
+    intubation         C_l2sp − C        overall    Δ=-0.0014 [-0.0021, -0.0008] → C
+    intubation       B_mirror − C        overall    Δ=-0.0029 [-0.0043, -0.0018] → C
+    intubation       B_mirror − C_l2sp   overall    Δ=-0.0015 [-0.0030, -0.0003] → C_l2sp
+    intubation       B_mirror − A        overall    Δ=+0.0011 [-0.0004, +0.0025] → tie
+    intubation              B − C        incident   Δ=-0.0081 [-0.0276, +0.0088] → tie
+    intubation              B − C_l2sp   incident   Δ=+0.0091 [-0.0106, +0.0306] → tie
+    intubation              B − B_mirror incident   Δ=+0.0053 [-0.0203, +0.0332] → tie
+    intubation              B − A        incident   Δ=+0.0217 [-0.0054, +0.0481] → tie
+    intubation              C − A        incident   Δ=+0.0298 [+0.0132, +0.0511] → C
+    intubation         C_l2sp − C        incident   Δ=-0.0172 [-0.0305, -0.0078] → C
+    intubation       B_mirror − C        incident   Δ=-0.0134 [-0.0331, +0.0053] → tie
+    intubation       B_mirror − C_l2sp   incident   Δ=+0.0039 [-0.0151, +0.0229] → tie
+    intubation       B_mirror − A        incident   Δ=+0.0164 [-0.0061, +0.0372] → tie
+
+--- Era 2020 - 2022  [current era] ---
+    vasopressor             B − C        overall    Δ=-0.0044 [-0.0080, -0.0009] → C
+    vasopressor             B − C_l2sp   overall    Δ=-0.0004 [-0.0045, +0.0034] → tie
+    vasopressor             B − B_mirror overall    Δ=+0.0026 [-0.0035, +0.0087] → tie
+    vasopressor             B − A        overall    Δ=+0.0151 [+0.0087, +0.0214] → B
+    vasopressor             C − A        overall    Δ=+0.0195 [+0.0137, +0.0257] → C
+    vasopressor        C_l2sp − C        overall    Δ=-0.0040 [-0.0066, -0.0015] → C
+    vasopressor      B_mirror − C        overall    Δ=-0.0070 [-0.0119, -0.0017] → C
+    vasopressor      B_mirror − C_l2sp   overall    Δ=-0.0030 [-0.0085, +0.0021] → tie
+    vasopressor      B_mirror − A        overall    Δ=+0.0126 [+0.0053, +0.0194] → B_mirror
+    vasopressor             B − C        incident   Δ=-0.0066 [-0.0211, +0.0096] → tie
+    vasopressor             B − C_l2sp   incident   Δ=-0.0048 [-0.0211, +0.0126] → tie
+    vasopressor             B − B_mirror incident   Δ=-0.0085 [-0.0280, +0.0113] → tie
+    vasopressor             B − A        incident   Δ=+0.0076 [-0.0172, +0.0356] → tie
+    vasopressor             C − A        incident   Δ=+0.0142 [-0.0060, +0.0365] → tie
+    vasopressor        C_l2sp − C        incident   Δ=-0.0018 [-0.0118, +0.0069] → tie
+    vasopressor      B_mirror − C        incident   Δ=+0.0019 [-0.0153, +0.0190] → tie
+    vasopressor      B_mirror − C_l2sp   incident   Δ=+0.0037 [-0.0125, +0.0213] → tie
+    vasopressor      B_mirror − A        incident   Δ=+0.0161 [-0.0057, +0.0421] → tie
+    intubation              B − C        overall    Δ=-0.0026 [-0.0050, -0.0007] → C
+    intubation              B − C_l2sp   overall    Δ=-0.0009 [-0.0030, +0.0013] → tie
+    intubation              B − B_mirror overall    Δ=-0.0005 [-0.0036, +0.0027] → tie
+    intubation              B − A        overall    Δ=+0.0019 [-0.0008, +0.0051] → tie
+    intubation              C − A        overall    Δ=+0.0045 [+0.0024, +0.0071] → C
+    intubation         C_l2sp − C        overall    Δ=-0.0017 [-0.0031, -0.0007] → C
+    intubation       B_mirror − C        overall    Δ=-0.0021 [-0.0045, +0.0003] → tie
+    intubation       B_mirror − C_l2sp   overall    Δ=-0.0004 [-0.0029, +0.0021] → tie
+    intubation       B_mirror − A        overall    Δ=+0.0024 [-0.0004, +0.0053] → tie
+    intubation              B − C        incident   Δ=-0.0221 [-0.0475, +0.0016] → tie
+    intubation              B − C_l2sp   incident   Δ=-0.0064 [-0.0323, +0.0194] → tie
+    intubation              B − B_mirror incident   Δ=-0.0174 [-0.0462, +0.0170] → tie
+    intubation              B − A        incident   Δ=+0.0072 [-0.0295, +0.0442] → tie
+    intubation              C − A        incident   Δ=+0.0293 [+0.0080, +0.0556] → C
+    intubation         C_l2sp − C        incident   Δ=-0.0156 [-0.0301, -0.0069] → C
+    intubation       B_mirror − C        incident   Δ=-0.0047 [-0.0260, +0.0208] → tie
+    intubation       B_mirror − C_l2sp   incident   Δ=+0.0109 [-0.0126, +0.0362] → tie
+    intubation       B_mirror − A        incident   Δ=+0.0246 [-0.0008, +0.0582] → tie
+
+--- Held-out cohort composition, final era ---
+  vasopressor      incident n= 2124 | prevalent n=  977 | 87% of positives already on treatment at h5
+  intubation       incident n= 2044 | prevalent n= 1057 | 93% of positives already on treatment at h5
+
+Run A  [reference line]
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  vasopressor                   0.8616      0.7607      0.6502   +0.0000   +0.0000
+  intubation                    0.9625      0.7991      0.8469   +0.0000   +0.0000
+
+Run B
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  vasopressor                   0.8767      0.7683      0.6863   +0.0081   -0.0063
+  intubation                    0.9644      0.8063      0.8411   +0.0016   +0.0022
+
+Run B_mirror
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  vasopressor                   0.8741      0.7768      0.6823   +0.0047   -0.0005
+  intubation                    0.9649      0.8236      0.8443   +0.0004   -0.0009
+
+Run C
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  vasopressor                   0.8811      0.7749      0.6985   +0.0119   +0.0034
+  intubation                    0.9670      0.8283      0.8519   +0.0040   +0.0040
+
+Run C_l2sp
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  vasopressor                   0.8771      0.7731      0.6877   +0.0100   +0.0028
+  intubation                    0.9653      0.8127      0.8495   +0.0026   +0.0029
+
+════════════════════════════════════════════════════════════
+METRIC GAIN EXPLANATION — Run A vs B vs C
+════════════════════════════════════════════════════════════
+
+  Post-drift AUROC gains vs frozen Run A:
+  label_vasopressor            B Δ=+0.0151 (moderate)  C Δ=+0.0195 (moderate)  → winner: C
+  label_intubation             B Δ=+0.0019 (negligible)  C Δ=+0.0045 (negligible)  → winner: C
+
+════════════════════════════════════════════════════════════
+ADAPTATION EXPLANATION — RunB
+════════════════════════════════════════════════════════════
+  Computing weight deltas...
+  Layer-stream weight changes:
+    physio     mean_rel_Δ=0.0000  max_rel_Δ=0.0000
+    treat      mean_rel_Δ=0.6160  max_rel_Δ=1.1521
+    fusion     mean_rel_Δ=0.6132  max_rel_Δ=0.8243
+  Computing treatment feature importance (permutation)...
+
+  Top treatment features driving adaptation (RunB):
+  Feature                             Importance    Drift   Combined
+  gcs_verbal_obs_rate                     1.0000   0.0300   0.029960
+  urine_output_ml_kg_hr_obs_rate          0.1019   0.2235   0.022781
+  total_crystalloid_ml                    0.2317   0.0954   0.022101
+  has_central_line_obs                    0.3322   0.0594   0.019732
+  urine_output_obs_rate                   0.0840   0.2235   0.018767
+  mean_fio2_obs                           0.4514   0.0269   0.012128
+  lactate_obs_rate                        0.1765   0.0522   0.009205
+  lactate_time_delta_mean                 0.1240   0.0662   0.008203
+  max_fio2_obs                            0.2715   0.0255   0.006919
+  gcs_motor_obs_rate                      0.1192   0.0388   0.004627
+
+--- Placebo adaptation control (pre-changepoint data (no quiet boundary available), matched size) ---
+  vasopressor      placebo Δ=+0.0024  real Δ at final era=+0.0151
+  intubation       placebo Δ=+0.0005  real Δ at final era=+0.0019
+
+Generating plots...
+PIN_SPLIT: every cohort matches the pinned split exactly
+
+======================================================================
+SUMMARY & AUDIT LOG
+======================================================================
+🚨 CLINICAL PRACTICE SHIFT DETECTED
+Between the training period (2014-2016) and the new data (2020-2022), patient treatment patterns have changed significantly.
+To maintain accuracy safely, the model locked its physiological representation and exclusively updated its treatment and fusion layers. This restores accuracy by forcing the network to relearn the specific features that carry high predictive importance but suffered from severe real-world drift (most notably Gcs Verbal Rate and Urine Output Ml Kg Hr Rate).
+
+Key clinical changes driving this update:
+• Urine Output Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Urine Output Ml Kg Hr Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Total Crystalloid Ml: Average value decreased from 908.82 to 639.82 (Severe Drift PSI: 0.10)
+• Lactate Time Delta Mean: Average value decreased from 2.24 to 2.11 (Severe Drift PSI: 0.07)
+• Central Line: Usage dropped by 5.9% in the newer data.
+
+What to check before writing this up:
+  1. acc_vs_bwt.png — Run B should sit up and to the RIGHT of C and C_l2sp:
+     comparable ACC, BWT closer to zero. That is the two-stream claim in one
+     figure. If C_l2sp matches B, the effect is regularization, not structure.
+  2. retention_trajectory_*.png — after an era's own adaptation step, a flat
+     line means no forgetting and a falling line means forgetting. Run C should
+     fall faster with each additional step; that compounding is the mechanism.
+  3. B vs B_mirror in paired_contrasts.json, on the EARLIER eras. If the mirror
+     ties B, freezing a large block is what helped and the decomposition claim
+     does not hold — this is the control a reviewer will look for first.
+  4. placebo_adaptation.json — the placebo ran at a boundary the detector called
+     quiet. If its gain approaches the real gain, 'adaptation helps' is really
+     'more data helps' and the drift framing is not carrying weight.
+  5. incident_* columns everywhere — the incident AUROC is the headline number,
+     not the overall one. Expect it substantially lower; that is the honest value.
+  6. drift_detection_log.json → 'deployable'. If false, only the label-dependent
+     oracle fired and the auto-detection claim has to be softened.
+
+On gradual drift: multiple boundaries firing is a RESULT, not a problem. State
+it plainly — 'drift in MIMIC-IV is continuous rather than a single event, so we
+adapt sequentially' is a stronger and more honest framing than a single
+changepoint, and it is why the sequential protocol is used here.

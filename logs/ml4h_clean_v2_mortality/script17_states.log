@@ -1,0 +1,56 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+==============================================================================
+SEED FLOOR — Run B vs Run B_mirror, every seed kept   <<< SHARE THIS BLOCK
+==============================================================================
+  B          adaptable params: 13,665
+  C          adaptable params: 77,025
+  seeds: [42, 123, 7, 2024, 99]
+
+  cohort 2014 - 2016: train=5223 es=1625 sel=1648
+  cohort 2017 - 2019: train=6354 es=1790 sel=1832
+  cohort 2020 - 2022: train=3249 es=640 sel=600
+  B: LR sweep {'3e-05': 0.8862, '0.0001': 0.8889, '0.0003': 0.8897, '0.001': 0.8886, '0.003': 0.8851} → 0.0003
+  B seed 42 done
+  B seed 123 done
+  B seed 7 done
+  B seed 2024 done
+  B seed 99 done
+  C: LR sweep {'3e-05': 0.887, '0.0001': 0.8871, '0.0003': 0.8878, '0.001': 0.8827, '0.003': 0.8729} → 0.0003
+  C seed 42 done
+  C seed 123 done
+  C seed 7 done
+  C seed 2024 done
+  C seed 99 done
+
+==============================================================================
+PER-SEED AUROC AND PAIRED DIFFERENCE
+==============================================================================
+
+mortality (incident)
+  al_calib)    events=  112   (not powered / probe)
+    B            0.8686 ± 0.0019   0.8652 0.8691 0.8696 0.8692 0.8696
+    C            0.8699 ± 0.0023   0.8707 0.8722 0.8691 0.8711 0.8663
+    B − C          seed -0.0013 ± 0.0033 sign 2/5 | patient -0.0013 95%[-0.0075,+0.0045] 90%lo -0.0066 → non-inferior
+  14 - 2016    events=  820
+    B            0.8551 ± 0.0010   0.8565 0.8548 0.8543 0.8558 0.8539
+    C            0.8549 ± 0.0011   0.8547 0.8564 0.8549 0.8553 0.8532
+    B − C          seed +0.0002 ± 0.0013 sign 3/5 | patient +0.0002 95%[-0.0024,+0.0026] 90%lo -0.0020 → non-inferior
+  17 - 2019    events=  972
+    B            0.8634 ± 0.0013   0.8631 0.8654 0.8625 0.8640 0.8620
+    C            0.8668 ± 0.0001   0.8668 0.8668 0.8666 0.8667 0.8670
+    B − C          seed -0.0034 ± 0.0014 sign 0/5 [resolved] | patient -0.0034 95%[-0.0057,-0.0008] 90%lo -0.0054 → non-inferior
+  20 - 2022    events=  363
+    B            0.8616 ± 0.0005   0.8622 0.8617 0.8610 0.8617 0.8613
+    C            0.8628 ± 0.0015   0.8618 0.8611 0.8625 0.8639 0.8647
+    B − C          seed -0.0012 ± 0.0017 sign 2/5 | patient -0.0012 95%[-0.0051,+0.0023] 90%lo -0.0044 → non-inferior
+
+------------------------------------------------------------------------------
+  0/0 powered TEST cells exceed their own seed sd.
+
+  → NOT RESOLVED. The gap is inside seed-to-seed variation. The
+    architecture claim cannot be made on this evidence — report the
+    dispersion and state that the comparison is underpowered.
+Saved → nn_states_bc_states.pt
+
+Saved → seed_floor_bc_states.json
+Saved → per_era_predictions_seeds_bc_states.npz

@@ -1,0 +1,21 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+lambda selection (mean incident AUROC on selection split): {'0.001': 0.8596, '0.01': 0.8565, '0.1': 0.8546, '1': 0.8476} -> selected 0.001
+B identical across all runs: OK
+all 4 cells: recomputed AUROCs, events and paired means match script17: OK
+all 4 tree cells: recomputed AUROCs, events and paired means match script30: OK
+
+params B 13,665 / C 77,025 = 17.7%; physio weight change mean 0.0 max 0.0
+
+label       era             ev      A      B      C   L2SP   B-C            B-L2SP
+Mortality   2011-13 probe  112 0.870 0.869 0.870 0.871   -0.0013 non-inferior  -0.0021 non-inferior   (probe, not powered)
+Mortality   2014 - 2016    820 0.849 0.855 0.855 0.856   +0.0002 non-inferior  -0.0005 non-inferior
+Mortality   2017 - 2019    972 0.858 0.863 0.867 0.867   -0.0034 non-inferior  -0.0038 non-inferior
+Mortality   2020 - 2022    363 0.855 0.862 0.863 0.863   -0.0012 non-inferior  -0.0011 non-inferior
+
+TREE        era             ev      A      B    Mir      C   B-C            B-Mirror
+Mortality   2011-13 probe  112 0.890 0.893 0.887 0.889   +0.0033 non-inferior  +0.0057   (probe, not powered)
+Mortality   2014 - 2016    820 0.863 0.868 0.869 0.871   -0.0031 non-inferior  -0.0003
+Mortality   2017 - 2019    972 0.871 0.875 0.876 0.878   -0.0025 non-inferior  -0.0003
+Mortality   2020 - 2022    363 0.858 0.863 0.864 0.866   -0.0031 non-inferior  -0.0009
+
+Saved → short_paper/table_main.csv/.tex, table_tree.csv/.tex, table_gain.csv, fig_auroc_by_era.pdf/.png, summary.json

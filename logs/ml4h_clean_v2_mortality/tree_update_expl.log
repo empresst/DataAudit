@@ -1,0 +1,16 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+[checks] rebuilt models match saved predictions; decomposition exact (max residual 9.2e-07); B_xgb physiology branch unchanged at every step
+
+label  arm    era           sd dz   unif  %phys %learn  flip %phys|flip   (mean over 5 seeds)
+mortal B_xgb  2014 - 2016   0.399 -0.003   3.3%  27.9%  1.4%       3.5%   seed-ρ 0.99
+mortal B_xgb  2017 - 2019   0.257 -0.031  23.9%  63.9%  2.1%      23.6%   seed-ρ 0.90
+mortal B_xgb  2020 - 2022   0.117 -0.009  12.6%  45.0%  0.6%      13.4%   seed-ρ 0.86
+mortal C_xgb  2014 - 2016   0.562 -0.012  58.3%  62.9%  3.3%      63.8%   seed-ρ 0.92
+mortal C_xgb  2017 - 2019   0.296 -0.024  43.3%  84.3%  2.4%      45.0%   seed-ρ 0.74
+mortal C_xgb  2020 - 2022   0.139 -0.025  39.0%  59.8%  0.9%      40.0%   seed-ρ 0.75
+
+Top drivers of each update (final step, mean |attribution| over seeds):
+  mortality   B_xgb  T:age, T:lactate_time_delta_mean, T:max_fio2_obs, T:mean_fio2_obs, T:map_invasive_time_delta_mean, T:total_crystalloid_ml
+  mortality   C_xgb  T:age, T:total_crystalloid_ml, P:dbp_noninvasive, T:urine_output_obs_rate, T:ph_venous_obs_rate, T:lactate_time_delta_mean
+
+Saved → update_explanations.json

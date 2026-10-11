@@ -1,0 +1,8 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 8622.59it/s]
+[check] corpus 3668 abstracts, cached embeddings (3668, 768), MedCPT query encoder loaded offline
+  vasopr trees  n=271  Jaccard vs source  physio B 1.000 C 0.375 (B>C 5/5) | treat B 0.338 C 0.368 (B>C 1/5)
+  vasopr neural n=271  Jaccard vs source  physio B 0.298 C 0.264 (B>C 5/5) | treat B 0.242 C 0.294 (B>C 0/5)
+  intuba trees  n=219  Jaccard vs source  physio B 1.000 C 0.474 (B>C 5/5) | treat B 0.604 C 0.559 (B>C 4/5)
+  intuba neural n=219  Jaccard vs source  physio B 0.252 C 0.238 (B>C 4/5) | treat B 0.413 C 0.411 (B>C 2/5)
+Saved → retrieval_eta0.03_lr3e-3.json

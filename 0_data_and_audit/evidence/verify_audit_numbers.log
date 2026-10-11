@@ -1,0 +1,38 @@
+== A1. 2020-22 reconstructed-year bin (raw_check_icu_records_check.log)
+stays with reconstructed year 2020-2022: 15984
+stays in the bin with reconstructed year after 2022: 761  (of which 2023: 702, later years: 59)
+neither-table stays in the bin: 8908; in 2020-2022 proper: 8147; after 2022: 761  -> all 761 post-2022 stays are missing: True
+share missing, bin: 53.198%; excluding post-2022: 50.970% (8147 of 15984)
+share lacking any inputevents (bin): 53.347% = 8933 of 16745
+
+== A2. BigQuery anchor-year group 2020-2022
+stays 10797; missing 6272 = 58.1%
+multi-stay admissions: 400 + 591 + 28 = 1019; mixed 2.7%
+multi-stay patients: 555 + 807 + 167 = 1529; mixed 10.9%
+care units with >=400 stays (8 units): no-data share 54.9-60.3%
+length-of-stay bins: 56.3-61.1%
+
+== A3. Phenylephrine stays, old ID vs old+229630+229632 (BigQuery Q2)
+2008-2010: 4661 -> 5038  (+8.1%)
+2011-2013: 3777 -> 4020  (+6.4%)
+2014-2016: 3834 -> 4141  (+8.0%)
+2017-2019: 1845 -> 3495  (+89.4%)
+2020-2022: 311 -> 1147  (+268.8%)
+
+== B. clean parquets vs flags
+flag stays: 79825 | clean-parquet stays: 71473 | joined: 71473
+excluded stays (has_input_data = 0) present in clean parquets: 0
+label_vasopressor == extended: 1.0 | == old: 0.9856
+already_vaso == extended: 1.0 | == old: 0.9833
+shape: (5, 5)
+┌───────────────────┬───────┬──────────┬──────────┬─────────────┐
+│ anchor_year_group ┆ stays ┆ rate_old ┆ rate_ext ┆ diff_points │
+│ ---               ┆ ---   ┆ ---      ┆ ---      ┆ ---         │
+│ str               ┆ u32   ┆ f64      ┆ f64      ┆ f64         │
+╞═══════════════════╪═══════╪══════════╪══════════╪═════════════╡
+│ 2008 - 2010       ┆ 12937 ┆ 0.166113 ┆ 0.166113 ┆ 0.0         │
+│ 2011 - 2013       ┆ 15675 ┆ 0.173461 ┆ 0.173461 ┆ 0.0         │
+│ 2014 - 2016       ┆ 16824 ┆ 0.220162 ┆ 0.220281 ┆ 0.01        │
+│ 2017 - 2019       ┆ 18946 ┆ 0.204581 ┆ 0.238837 ┆ 3.43        │
+│ 2020 - 2022       ┆ 7091  ┆ 0.224792 ┆ 0.277676 ┆ 5.29        │
+└───────────────────┴───────┴──────────┴──────────┴─────────────┘

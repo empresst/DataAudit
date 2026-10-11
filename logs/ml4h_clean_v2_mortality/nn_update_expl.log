@@ -1,0 +1,15 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+[IG] median integration error of the update 0.0161 vs median patient-specific |Δz| 0.1179
+
+label  arm era           sd dz    unif  %phys  flip seed-ρ  (mean of 5 seeds)
+mortal B   2014 - 2016   0.186  +0.224  26.5%  1.2%   0.96
+mortal B   2017 - 2019   0.270  -0.024  24.7%  1.4%   0.96
+mortal B   2020 - 2022   0.154  -0.065  25.8%  1.0%   0.95
+mortal C   2014 - 2016   0.236  +0.136  43.0%  1.9%   0.88
+mortal C   2017 - 2019   0.155  +0.097  37.5%  1.6%   0.82
+mortal C   2020 - 2022   0.197  -0.230  37.5%  1.4%   0.87
+
+Top drivers of each update (final step):
+  mortality   B T:heart_rate_obs_rate, T:map_invasive_time_delta_mean, T:age, T:lactate_time_delta_mean, T:gcs_verbal_obs_rate, T:resp_rate_obs_rate
+  mortality   C T:heart_rate_obs_rate, T:map_invasive_time_delta_mean, T:lactate_time_delta_mean, T:age, T:resp_rate_obs_rate, P:resp_rate_rollmean_3
+Saved → nn_update_explanations_bc_states.json

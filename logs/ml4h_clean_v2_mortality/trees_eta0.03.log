@@ -1,0 +1,47 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+==============================================================================
+MODULAR XGBOOST (clean-v2) — bounded vs full update in trees   <<< SHARE THIS BLOCK
+==============================================================================
+  cohort 2014 - 2016: train+replay=5223 es=1625 sel=1648
+  cohort 2017 - 2019: train+replay=6354 es=1790 sel=1832
+  cohort 2020 - 2022: train+replay=3249 es=640 sel=600
+  source mortality    val-ES incident AUROC 0.8885   head (b, wP, wT) = (-2.027, 0.785, 0.660)   [1.4 min]
+  B_xgb         eta sweep {0.03: 0.8967} → 0.03 (grid edge)   [1.4 min]
+  C_xgb         eta sweep {0.03: 0.8963} → 0.03 (grid edge)   [1.5 min]
+  mortality    B_xgb done [1.7 min]
+  mortality    C_xgb done [3.0 min]
+
+==============================================================================
+INCIDENT AUROC, final models, mean ± SD over seeds
+==============================================================================
+
+mortality
+  source (val_calib)   events= 112   (probe / not powered)
+    A_xgb         0.8902 ± 0.0000
+    B_xgb         0.8936 ± 0.0011   gain vs A +0.0034
+    C_xgb         0.8895 ± 0.0019   gain vs A -0.0007
+    B_xgb − C_xgb              seed +0.0041 ± 0.0019 sign 5/5 | patient 95%[-0.0019,+0.0110] 90%lo -0.0009 → non-inferior
+  2014 - 2016          events= 820
+    A_xgb         0.8633 ± 0.0000
+    B_xgb         0.8692 ± 0.0004   gain vs A +0.0059
+    C_xgb         0.8714 ± 0.0007   gain vs A +0.0081
+    B_xgb − C_xgb              seed -0.0022 ± 0.0010 sign 0/5 | patient 95%[-0.0048,+0.0004] 90%lo -0.0043 → non-inferior
+  2017 - 2019          events= 972
+    A_xgb         0.8706 ± 0.0000
+    B_xgb         0.8764 ± 0.0006   gain vs A +0.0058
+    C_xgb         0.8779 ± 0.0011   gain vs A +0.0073
+    B_xgb − C_xgb              seed -0.0015 ± 0.0016 sign 1/5 | patient 95%[-0.0038,+0.0009] 90%lo -0.0034 → non-inferior
+  2020 - 2022          events= 363
+    A_xgb         0.8579 ± 0.0000
+    B_xgb         0.8643 ± 0.0005   gain vs A +0.0064
+    C_xgb         0.8662 ± 0.0015   gain vs A +0.0083
+    B_xgb − C_xgb              seed -0.0019 ± 0.0018 sign 1/5 | patient 95%[-0.0058,+0.0020] 90%lo -0.0053 → non-inferior
+
+  trees added per delta booster (median [min, max]):
+    B_xgb         35 [5, 219] over 15 boosters
+    C_xgb         38 [1, 206] over 30 boosters
+
+  eta per arm: {'B_xgb': 0.03, 'C_xgb': 0.03}   NI margin 0.015   wall time 4.4 min
+
+Saved → modular_xgboost_clean_eta0.03.json, per_era_predictions_modxgb_eta0.03.npz
+Saved → modxgb_models_eta0.03.pkl  (10 updated models + source; reload check max |Δp| = 0.0e+00)

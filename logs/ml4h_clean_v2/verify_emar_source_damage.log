@@ -1,0 +1,9 @@
+n_distinct_meds training sd used by the pipeline: 0.0367
+
+era           label         events    as-is   zeroed        Δ   max z(n_distinct_meds)
+2014 - 2016   vasopressor      226   0.7401   0.7913  +0.0513   571
+2014 - 2016   intubation       156   0.7241   0.7629  +0.0387   571
+2017 - 2019   vasopressor      244   0.7495   0.7945  +0.0450   735
+2017 - 2019   intubation       140   0.6930   0.7608  +0.0679   735
+2020 - 2022   vasopressor      105   0.6454   0.6976  +0.0522   599
+2020 - 2022   intubation       148   0.7386   0.8009  +0.0622   599

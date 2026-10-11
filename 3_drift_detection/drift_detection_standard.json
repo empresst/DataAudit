@@ -1,0 +1,126 @@
+{
+ "rule": "lower 95% subject-bootstrap bound of grouped-CV C2ST AUROC > 0.6",
+ "n_per_side": 2000,
+ "false_alarm_rate": 0.0,
+ "null_auroc_mean": 0.49958957500000006,
+ "adjacent_source_years_auroc": 0.5934245,
+ "steps": [
+  {
+   "step": 1,
+   "era": "2014 - 2016",
+   "n_ref": 2000,
+   "n_new": 2000,
+   "c2st_all": {
+    "auroc": 0.714693,
+    "lo95": 0.7017022538839167,
+    "fire": true
+   },
+   "c2st_physio": {
+    "auroc": 0.6990244999999999,
+    "lo95": 0.6854956990364494,
+    "fire": true
+   },
+   "c2st_treat": {
+    "auroc": 0.59675175,
+    "lo95": 0.5778097250042589,
+    "fire": false
+   },
+   "bbsd": {
+    "tree": {
+     "p_min_bonf": 0.299382111187172,
+     "p_per_label": [
+      0.24148215150724364,
+      0.149691055593586
+     ]
+    },
+    "nn": {
+     "p_min_bonf": 0.29938212037086487,
+     "p_per_label": [
+      0.14969106018543243,
+      0.6655293107032776
+     ]
+    }
+   },
+   "fire": true,
+   "scope_suggested": "physiology moved too: freeze premise violated"
+  },
+  {
+   "step": 2,
+   "era": "2017 - 2019",
+   "n_ref": 2000,
+   "n_new": 2000,
+   "c2st_all": {
+    "auroc": 0.7993399999999999,
+    "lo95": 0.7870885911611616,
+    "fire": true
+   },
+   "c2st_physio": {
+    "auroc": 0.7608910000000001,
+    "lo95": 0.74717957599727,
+    "fire": true
+   },
+   "c2st_treat": {
+    "auroc": 0.7204595,
+    "lo95": 0.7058307370570027,
+    "fire": true
+   },
+   "bbsd": {
+    "tree": {
+     "p_min_bonf": 0.009416940629313664,
+     "p_per_label": [
+      0.7185142568618185,
+      0.004708470314656832
+     ]
+    },
+    "nn": {
+     "p_min_bonf": 0.15041832625865936,
+     "p_per_label": [
+      0.07520916312932968,
+      0.3100757300853729
+     ]
+    }
+   },
+   "fire": true,
+   "scope_suggested": "physiology moved too: freeze premise violated"
+  },
+  {
+   "step": 3,
+   "era": "2020 - 2022",
+   "n_ref": 2000,
+   "n_new": 2000,
+   "c2st_all": {
+    "auroc": 0.769606,
+    "lo95": 0.7545839507106964,
+    "fire": true
+   },
+   "c2st_physio": {
+    "auroc": 0.728402,
+    "lo95": 0.7136979934841727,
+    "fire": true
+   },
+   "c2st_treat": {
+    "auroc": 0.72841425,
+    "lo95": 0.7134250910297012,
+    "fire": true
+   },
+   "bbsd": {
+    "tree": {
+     "p_min_bonf": 0.4234796346981344,
+     "p_per_label": [
+      0.4132324404768168,
+      0.2117398173490672
+     ]
+    },
+    "nn": {
+     "p_min_bonf": 4.841551344725303e-06,
+     "p_per_label": [
+      2.4207756723626517e-06,
+      0.14969106018543243
+     ]
+    }
+   },
+   "fire": true,
+   "scope_suggested": "physiology moved too: freeze premise violated"
+  }
+ ]
+}

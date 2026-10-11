@@ -1,0 +1,51 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+[checks] B's LSTM identical to the source at every step; reloaded models reproduce saved predictions
+[IG] completeness error: median 0.0165 vs median |f(x)-f(0)| 1.0488  (ratio 1.7%)
+
+NEURAL: source-vs-updated explanation agreement, B (bounded) vs C (full); mean over 5 seeds
+label  era          measure            B       C      B-C  seed sd  B>C seeds
+vasopr 2014 - 2016  rho_all        0.843   0.888   -0.045    0.053  1/5
+vasopr 2014 - 2016  rho_physio     0.930   0.888   +0.042    0.036  5/5
+vasopr 2014 - 2016  rho_treat      0.782   0.884   -0.102    0.065  1/5
+vasopr 2014 - 2016  top5_all       0.622   0.681   -0.059    0.076  1/5
+vasopr 2014 - 2016  top5_physio    0.759   0.704   +0.055    0.058  5/5
+vasopr 2014 - 2016  top5_treat     0.582   0.667   -0.086    0.060  1/5
+
+vasopr 2017 - 2019  rho_all        0.802   0.845   -0.043    0.046  1/5
+vasopr 2017 - 2019  rho_physio     0.887   0.820   +0.067    0.053  5/5
+vasopr 2017 - 2019  rho_treat      0.756   0.869   -0.113    0.041  0/5
+vasopr 2017 - 2019  top5_all       0.582   0.613   -0.031    0.040  1/5
+vasopr 2017 - 2019  top5_physio    0.696   0.609   +0.087    0.048  5/5
+vasopr 2017 - 2019  top5_treat     0.558   0.667   -0.110    0.034  0/5
+
+vasopr 2020 - 2022  rho_all        0.783   0.821   -0.038    0.053  1/5
+vasopr 2020 - 2022  rho_physio     0.885   0.806   +0.079    0.050  5/5
+vasopr 2020 - 2022  rho_treat      0.722   0.837   -0.115    0.055  0/5
+vasopr 2020 - 2022  top5_all       0.543   0.565   -0.022    0.050  2/5
+vasopr 2020 - 2022  top5_physio    0.684   0.598   +0.086    0.050  5/5
+vasopr 2020 - 2022  top5_treat     0.511   0.610   -0.099    0.047  0/5
+                    seed-to-seed floor (rho phys/treat/all): B 0.965/0.907/0.929  C 0.921/0.942/0.934
+
+intuba 2014 - 2016  rho_all        0.866   0.928   -0.062    0.049  1/5
+intuba 2014 - 2016  rho_physio     0.851   0.899   -0.048    0.066  1/5
+intuba 2014 - 2016  rho_treat      0.887   0.951   -0.063    0.034  0/5
+intuba 2014 - 2016  top5_all       0.713   0.778   -0.065    0.052  1/5
+intuba 2014 - 2016  top5_physio    0.596   0.649   -0.053    0.096  1/5
+intuba 2014 - 2016  top5_treat     0.782   0.847   -0.064    0.033  0/5
+
+intuba 2017 - 2019  rho_all        0.820   0.869   -0.050    0.022  0/5
+intuba 2017 - 2019  rho_physio     0.813   0.837   -0.024    0.040  1/5
+intuba 2017 - 2019  rho_treat      0.844   0.903   -0.059    0.016  0/5
+intuba 2017 - 2019  top5_all       0.645   0.693   -0.048    0.024  0/5
+intuba 2017 - 2019  top5_physio    0.521   0.570   -0.048    0.050  0/5
+intuba 2017 - 2019  top5_treat     0.705   0.759   -0.053    0.030  0/5
+
+intuba 2020 - 2022  rho_all        0.824   0.870   -0.046    0.050  1/5
+intuba 2020 - 2022  rho_physio     0.802   0.820   -0.018    0.099  2/5
+intuba 2020 - 2022  rho_treat      0.854   0.913   -0.059    0.022  0/5
+intuba 2020 - 2022  top5_all       0.646   0.691   -0.044    0.039  1/5
+intuba 2020 - 2022  top5_physio    0.513   0.544   -0.031    0.087  2/5
+intuba 2020 - 2022  top5_treat     0.707   0.762   -0.056    0.036  1/5
+                    seed-to-seed floor (rho phys/treat/all): B 0.928/0.921/0.917  C 0.934/0.957/0.945
+
+Saved → nn_explanation_stability_lr3e-4.json   (LR {'B': 0.0003, 'C': 0.0003})

@@ -1,0 +1,23 @@
+# Output of compare_2020_22_exclusion.py (version with --files, one row per stay), run by the authors locally.
+# Command (inputs are NOT in this repo: ~/preclean_mimic/*_final_enriched4.parquet are the pre-clean files):
+#   T=./preclean_mimic
+#   python compare_2020_22_exclusion.py \
+#     --files $T/train_final_enriched4.parquet $T/val_final_enriched4.parquet $T/test_final_enriched4.parquet \
+#     --flags ./build/stay_flags.parquet
+# The flags file contains 15,363 stays in the 2020-2022 group.
+# Transcribed from the terminal output.
+
+Loading base features from: ['./preclean_mimic/train_final_enriched4.parquet', './preclean_mimic/val_final_enriched4.parquet', './preclean_mimic/test_final_enriched4.parquet']
+2020-2022 stays in flags: 15363; found in base table: 15086
+
+2020-2022 stays analyzed: 15086
+
+Cohort split:  excluded=true 8124 | excluded=false 6962
+
+=== Standardized Mean Differences (SMD) Summary ===
+variable                    type        excluded_stat     retained_stat     smd
+N (stays)                   Count       8124              6962              -
+Age (years)                 Continuous  65.13 +/- 16.25   65.12 +/- 16.18   0.0005
+Weight (kg)                 Continuous  78.50 +/- 8.92    78.68 +/- 9.89    -0.0191
+Female (%)                  Binary      43.6%             43.3%             0.0069
+In-hospital Mortality (%)   Binary      12.2%             11.4%             0.0266

@@ -1,0 +1,70 @@
+{
+ "rule": "lower 95% subject-bootstrap bound of grouped-CV C2ST AUROC > 0.6",
+ "auc_min": 0.6,
+ "false_alarm_rate": 0.0,
+ "null_auroc_mean": 0.49958957500000006,
+ "decisions": [
+  {
+   "step": 1,
+   "era": "2014 - 2016",
+   "c2st_all_auroc": 0.714693,
+   "c2st_all_lo95": 0.7017022538839167,
+   "update": true
+  },
+  {
+   "step": 2,
+   "era": "2017 - 2019",
+   "c2st_all_auroc": 0.7993399999999999,
+   "c2st_all_lo95": 0.7870885911611616,
+   "update": true
+  },
+  {
+   "step": 3,
+   "era": "2020 - 2022",
+   "c2st_all_auroc": 0.769606,
+   "c2st_all_lo95": 0.7545839507106964,
+   "update": true
+  }
+ ],
+ "all_steps_fired": true,
+ "conclusion": "Gated schedule == forced schedule: every step fired, so the same updates run in the same order; saved predictions are the gated-schedule results.",
+ "not_exercised": "no-update branch (no step failed to fire)",
+ "files": [
+  {
+   "path": "per_era_predictions_seeds_lr3e-3.npz",
+   "family": "neural vaso/intub",
+   "arms": [
+    "B",
+    "C"
+   ],
+   "sha256": "dc0fdefd0d1fda3b7abe70a1144b475e3def47ed73de8a040c5ed1cf81518b55"
+  },
+  {
+   "path": "per_era_predictions_modxgb_eta0.03.npz",
+   "family": "trees vaso/intub",
+   "arms": [
+    "B_xgb",
+    "C_xgb"
+   ],
+   "sha256": "5176fe80269953b048e9dff399bc5a60230decbb5e9e923e70f3b79a9a02ba17"
+  },
+  {
+   "path": "../ml4h_clean_v2_mortality/per_era_predictions_seeds.npz",
+   "family": "neural mortality",
+   "arms": [
+    "B",
+    "C"
+   ],
+   "sha256": "77450a9adc0725a7c018592749bde137bbe4ddd6b5c9680e80597a28edf25281"
+  },
+  {
+   "path": "../ml4h_clean_v2_mortality/per_era_predictions_modxgb_eta0.03.npz",
+   "family": "trees mortality",
+   "arms": [
+    "B_xgb",
+    "C_xgb"
+   ],
+   "sha256": "f2a04e533de1cfe3a2eabec1f5e371f794f52c62de3fb10dd55c91d6adb7de65"
+  }
+ ]
+}

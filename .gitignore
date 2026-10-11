@@ -1,0 +1,62 @@
+# ==========================================
+# Patient data & model weights (PhysioNet credentialed)
+# ==========================================
+*.parquet
+*.pt
+*.pth
+*.npz
+*.pkl
+*.bin
+*.joblib
+*.tar.gz
+*.csv.gz
+
+# Data directories (raw MIMIC / processed features)
+data/
+data_preclean/
+raw_mimic/
+corpus/
+build/
+
+# ==========================================
+# Python environment & cache
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+
+# ==========================================
+# LaTeX build artifacts & temporary logs (keep .tex, .pdf, .bib, .sty, .bst, .bbl)
+# ==========================================
+*.aux
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex*
+*.blg
+paper/tmlr/*.log
+paper/*.log
+*.log
+
+# Explicitly track verified aggregate experiment logs
+!logs/**/*.log
+!0_data_and_audit/*.log
+!0_data_and_audit/evidence/*.log
+!3_drift_detection/*.log
+
+# ==========================================
+# OS & Editor artifacts
+# ==========================================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~

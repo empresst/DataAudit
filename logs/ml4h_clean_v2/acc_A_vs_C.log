@@ -1,0 +1,15 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['vasopressor', 'intubation']  (dropped: ['septic_shock'])
+neural Vasopressor 2014 - 2016  ev= 227  gain C +0.0030 [-0.0128,+0.0203]  gain B +0.0094  A-C -0.0030 lo90 -0.0175 A fails NI  | B-C +0.0064 lo90 -0.0024 B NI | retained 3.17 [-8.09,15.01]  (unstable)
+neural Vasopressor 2017 - 2019  ev= 284  gain C +0.0145 [-0.0023,+0.0321]  gain B +0.0147  A-C -0.0145 lo90 -0.0290 A fails NI  | B-C +0.0002 lo90 -0.0069 B NI | retained 1.01 [-0.61,3.77]  (unstable)
+neural Vasopressor 2020 - 2022  ev= 121  gain C +0.0074 [-0.0220,+0.0368]  gain B +0.0117  A-C -0.0074 lo90 -0.0331 A fails NI  | B-C +0.0043 lo90 -0.0059 B NI | retained 1.58 [-3.18,7.42]  (unstable)
+neural Intubation  2014 - 2016  ev= 156  gain C -0.0029 [-0.0269,+0.0220]  gain B +0.0066  A-C +0.0029 lo90 -0.0179 A fails NI  | B-C +0.0095 lo90 -0.0064 B NI | retained -2.26 [-13.03,17.88]  (unstable)
+neural Intubation  2017 - 2019  ev= 139  gain C -0.0042 [-0.0268,+0.0189]  gain B +0.0149  A-C +0.0042 lo90 -0.0164 A fails NI  | B-C +0.0191 lo90 +0.0072 B NI | retained -3.54 [-21.76,16.15]  (unstable)
+neural Intubation  2020 - 2022  ev=  69  gain C +0.0037 [-0.0262,+0.0344]  gain B +0.0075  A-C -0.0037 lo90 -0.0306 A fails NI  | B-C +0.0038 lo90 -0.0144 B NI | retained 2.01 [-5.80,8.82]  (unstable)
+trees  Vasopressor 2014 - 2016  ev= 227  gain C +0.0032 [-0.0095,+0.0156]  gain B +0.0030  A-C -0.0032 lo90 -0.0132 A PASSES NI | B-C -0.0002 lo90 -0.0059 B NI | retained 0.95 [-3.94,7.04]  (unstable)
+trees  Vasopressor 2017 - 2019  ev= 284  gain C +0.0036 [-0.0076,+0.0148]  gain B +0.0050  A-C -0.0036 lo90 -0.0124 A PASSES NI | B-C +0.0014 lo90 -0.0037 B NI | retained 1.40 [-4.25,7.18]  (unstable)
+trees  Vasopressor 2020 - 2022  ev= 121  gain C +0.0170 [-0.0054,+0.0375]  gain B +0.0214  A-C -0.0170 lo90 -0.0342 A fails NI  | B-C +0.0044 lo90 -0.0037 B NI | retained 1.26 [-2.96,5.83]  (unstable)
+trees  Intubation  2014 - 2016  ev= 156  gain C +0.0279 [+0.0070,+0.0496]  gain B +0.0153  A-C -0.0279 lo90 -0.0463 A fails NI  | B-C -0.0126 lo90 -0.0251 B -- | retained 0.55 [-0.01,1.06]
+trees  Intubation  2017 - 2019  ev= 139  gain C +0.0085 [-0.0090,+0.0249]  gain B +0.0039  A-C -0.0085 lo90 -0.0224 A fails NI  | B-C -0.0046 lo90 -0.0147 B NI | retained 0.46 [-3.48,3.64]  (unstable)
+trees  Intubation  2020 - 2022  ev=  69  gain C +0.0273 [-0.0044,+0.0598]  gain B +0.0135  A-C -0.0273 lo90 -0.0527 A fails NI  | B-C -0.0138 lo90 -0.0282 B -- | retained 0.49 [-0.67,1.61]  (unstable)
+
+Saved -> A_vs_C_shared.json/.csv  (NN per_era_predictions_seeds_lr3e-3.npz, trees per_era_predictions_modxgb_eta0.03.npz)

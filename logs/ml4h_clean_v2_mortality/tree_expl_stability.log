@@ -1,0 +1,29 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+[check] B_xgb physiology Spearman = 1 for every patient, model and era (linear-head guarantee)
+
+Source-vs-updated explanation agreement, B (bounded) vs C (full); mean over 5 seeds and patients
+label  era          measure            B       C      B-C              95% CI  B>C seeds
+mortal 2014 - 2016  rho_all        0.983   0.914   +0.069  [+0.068, +0.070]  5/5
+mortal 2014 - 2016  rho_treat      0.966   0.986   -0.019  [-0.020, -0.019]  0/5
+mortal 2014 - 2016  top5_all       0.816   0.660   +0.156  [+0.152, +0.159]  5/5
+mortal 2014 - 2016  top5_treat     0.792   0.877   -0.085  [-0.087, -0.084]  1/5
+mortal 2014 - 2016  rho_physio     1.000   0.848   +0.152  [+0.151, +0.153]  5/5
+mortal 2014 - 2016  top5_physio    1.000   0.691   +0.309  [+0.306, +0.313]  5/5
+
+mortal 2017 - 2019  rho_all        0.920   0.849   +0.070  [+0.070, +0.071]  5/5
+mortal 2017 - 2019  rho_treat      0.837   0.868   -0.030  [-0.031, -0.030]  1/5
+mortal 2017 - 2019  top5_all       0.765   0.605   +0.161  [+0.157, +0.164]  5/5
+mortal 2017 - 2019  top5_treat     0.569   0.622   -0.052  [-0.054, -0.050]  1/5
+mortal 2017 - 2019  rho_physio     1.000   0.828   +0.172  [+0.171, +0.174]  5/5
+mortal 2017 - 2019  top5_physio    1.000   0.648   +0.352  [+0.349, +0.355]  5/5
+
+mortal 2020 - 2022  rho_all        0.918   0.845   +0.073  [+0.072, +0.074]  5/5
+mortal 2020 - 2022  rho_treat      0.835   0.862   -0.026  [-0.027, -0.025]  1/5
+mortal 2020 - 2022  top5_all       0.766   0.591   +0.175  [+0.169, +0.182]  5/5
+mortal 2020 - 2022  top5_treat     0.559   0.599   -0.040  [-0.043, -0.036]  1/5
+mortal 2020 - 2022  rho_physio     1.000   0.827   +0.173  [+0.171, +0.176]  5/5
+mortal 2020 - 2022  top5_physio    1.000   0.638   +0.362  [+0.356, +0.367]  5/5
+                    seed-to-seed floor (rho phys/treat/all): B 1.000/0.929/0.966  C 0.889/0.938/0.914
+
+largest share of patients with an undefined Spearman (constant attribution row): 0.0%
+Saved → explanation_stability.json

@@ -1,0 +1,490 @@
+[constants] FAST_MODE=False | seeds=5 N_BOOT=1000 | labels=['mortality']  (dropped: ['septic_shock'])
+Device: cpu
+FORCE_ADAPT = True
+PIN_SPLIT: cohorts pinned to ./pin_split_v2.json
+
+Feature configuration: 51 physio + 49 treatment = 100 channels
+ABLATE_LEAKY_PHYSIO = False  → run again with True and report the ablation
+
+Loading data...
+✅ Val temporal integrity confirmed: {'2011 - 2013'}
+seq_dim=51 treat_dim=49
+Source-era val: 2721 stays for early stopping / selection, 1463 stays held clean for drift reference + retention
+
+======================================================================
+PHASE 1: Source ensemble (5 seeds)
+======================================================================
+
+--- Source seed 42 ---
+  SRC-s42 Ep  1 | tL=0.3698 vL=0.3087 AUROC=['0.869'] *
+  SRC-s42 Ep  5 | tL=0.2984 vL=0.3390 AUROC=['0.863'] 
+  SRC-s42 Early stop at ep 9
+
+--- Source seed 123 ---
+  SRC-s123 Ep  1 | tL=0.3695 vL=0.3166 AUROC=['0.859'] *
+  SRC-s123 Ep  3 | tL=0.3213 vL=0.3155 AUROC=['0.865'] *
+  SRC-s123 Ep  5 | tL=0.2958 vL=0.4203 AUROC=['0.869'] 
+  SRC-s123 Ep 10 | tL=0.2406 vL=0.6631 AUROC=['0.849'] 
+  SRC-s123 Early stop at ep 11
+
+--- Source seed 7 ---
+  SRC-s7 Ep  1 | tL=0.3737 vL=0.3365 AUROC=['0.858'] *
+  SRC-s7 Ep  2 | tL=0.3360 vL=0.3190 AUROC=['0.862'] *
+  SRC-s7 Ep  5 | tL=0.2970 vL=0.3603 AUROC=['0.864'] 
+  SRC-s7 Ep 10 | tL=0.2443 vL=0.5143 AUROC=['0.847'] 
+  SRC-s7 Early stop at ep 10
+
+--- Source seed 2024 ---
+  SRC-s2024 Ep  1 | tL=0.3669 vL=0.3218 AUROC=['0.856'] *
+  SRC-s2024 Ep  2 | tL=0.3330 vL=0.3109 AUROC=['0.866'] *
+  SRC-s2024 Ep  5 | tL=0.2975 vL=0.3460 AUROC=['0.868'] 
+  SRC-s2024 Ep 10 | tL=0.2378 vL=0.5474 AUROC=['0.859'] 
+  SRC-s2024 Early stop at ep 10
+
+--- Source seed 99 ---
+  SRC-s99 Ep  1 | tL=0.3711 vL=0.3210 AUROC=['0.860'] *
+  SRC-s99 Ep  2 | tL=0.3333 vL=0.3144 AUROC=['0.868'] *
+  SRC-s99 Ep  3 | tL=0.3180 vL=0.3138 AUROC=['0.865'] *
+  SRC-s99 Ep  5 | tL=0.2975 vL=0.3321 AUROC=['0.862'] 
+  SRC-s99 Ep 10 | tL=0.2363 vL=0.5020 AUROC=['0.858'] 
+  SRC-s99 Early stop at ep 11
+
+Canonical source: seed 123 (val_es selection score=0.8653)
+
+Adaptable parameters per arm:
+  B          13,665
+  B_mirror   63,360
+  C          77,025
+  C_l2sp     77,025
+  (Run D in script3 is capacity-matched to Run B via solve_head_hidden)
+PIN_SPLIT: 16580 adapt / 15742 eval subjects (0 test subjects in neither)
+
+Chronological cohort assignment (earliest → adapt, latest → evaluate):
+  2014 - 2016    adapt years [2014, 2015]  →  eval years [2015, 2016]
+  2017 - 2019    adapt years [2017, 2018]  →  eval years [2018, 2019]
+  2020 - 2022    adapt years [2020, 2021]  →  eval years [2021, 2022]
+  2014 - 2016: 6727 detection / 6727 eval subjects
+  2017 - 2019: 7320 detection / 7412 eval subjects
+  2020 - 2022: 3194 detection / 2474 eval subjects
+  1464/32322 test-era subjects have stays in more than one era group; each is assigned to a single cohort globally.
+
+Temporal separation audit (adaptation must precede evaluation):
+  2014 - 2016    last adapt year=2016 | 69.8% of eval stays strictly earlier (5813/8328)
+  2017 - 2019    last adapt year=2019 | 72.4% of eval stays strictly earlier (6852/9470)
+  2020 - 2022    last adapt year=2022 | 89.6% of eval stays strictly earlier (2779/3101)
+  Non-zero values come from year-resolution ties and multi-era patients — MIMIC-IV
+  date-shifts per patient, so finer-grained ordering is not recoverable. Report
+  this table rather than claiming strict chronological separation.
+
+======================================================================
+PHASE 2b: Drift detection
+======================================================================
+
+Monitored channels: 40 treatment continuous + 7 treatment binary | 51 physiology
+
+Stage-2 calibration on 4 train-era years [2009, 2010, 2011, 2012]:
+  treatment   rolling ratios [5.67, 0.79, 5.02] → threshold 5.67
+  physiology  rolling ratios [4.22, 0.92, 3.86] → threshold 4.22
+
+Performance-branch reference (val_calib — clean source-era split):
+  label_mortality          AUROC=0.8648 SE=0.0133 → threshold=0.0267
+  MIN_PERF_DROPS=1 of 1 active labels.
+
+--- Detection log (ratios are multiples of the worst train-era year-to-year shift) ---
+  2011 - 2013 → 2014 - 2016    treat x 0.70   -  (n=30) | physio x 1.70 FIRE (n=12) | oracle ΔAUROC=-0.0006 (  - , 0/3)
+  2014 - 2016 → 2017 - 2019    treat x 1.15 FIRE (n=29) | physio x 0.92   -  (n=15) | oracle ΔAUROC=-0.0038 (  - , 0/3)
+  2017 - 2019 → 2020 - 2022    treat x 0.34   -  (n= 9) | physio x 0.50   -  (n= 9) | oracle ΔAUROC=+0.0110 (  - , 0/3)
+  Gate = ('distribution',). The oracle branch needs h8-h14 outcomes and is
+  reported as a validation of the label-free gate, not as a trigger.
+
+  ⚠ PHYSIOLOGY GATE FIRED. The freeze premise — that the physiological
+    representation is stable enough to hold fixed — is violated at the
+    boundaries above. Configured action: flag.
+
+Gate vs oracle over 3 boundaries: agree 2, gate-only 1, oracle-only 0
+
+✅ Drift onset (reporting changepoint): 2017 - 2019 | branches: distribution | rule: argmax
+
+════════════════════════════════════════════════════════════
+DRIFT EXPLAINABILITY — Feature-level analysis
+════════════════════════════════════════════════════════════
+
+======================================================================
+DETAILED DRIFT ANALYSIS & EXPLANATION
+======================================================================
+🚨 CLINICAL PRACTICE SHIFT DETECTED
+Between the training period (2014-2016) and the new data (2020-2022), patient treatment patterns have changed significantly.
+The model will now trigger an adaptation phase to account for these shifts.
+
+Key clinical changes driving this update:
+• Urine Output Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Urine Output Ml Kg Hr Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Total Crystalloid Ml: Average value decreased from 908.82 to 639.82 (Severe Drift PSI: 0.10)
+• Lactate Time Delta Mean: Average value decreased from 2.24 to 2.11 (Severe Drift PSI: 0.07)
+• Central Line: Usage dropped by 5.9% in the newer data.
+
+  physio observed-value PSI: 51 features, 47 exceed their own train-era null (max PSI 0.303703, median 0.011868)
+    exceeding: ['heart_rate', 'sbp_noninvasive', 'dbp_noninvasive', 'sbp_invasive', 'dbp_invasive', 'map_invasive', 'temperature_c', 'spo2']
+
+  Spearman stability: 40 features, 780 pairs
+    pairwise mean|Δρ| 0.016974 (train-era null p95 0.004848)   ← EXCEEDS null
+    structure similarity 0.988449 (null p05 0.999124)
+    label_mortality        mean|Δρ(feature,label)| 0.018992, 0 sign flips
+    Marginal PSI stability says NOTHING about these numbers. If the
+    pairwise structure holds but outcome associations move, say so — the
+    labels ARE treatment decisions, so that is the expected direction.
+PIN_SPLIT: evaluation cohorts match the pinned split
+
+Evaluation eras (held permanently in the evaluation): ['source (val_calib)', '2014 - 2016', '2017 - 2019', '2020 - 2022']
+  source (val_calib)       1463 stays
+  2014 - 2016              8328 stays
+  2017 - 2019              9470 stays
+  2020 - 2022              3101 stays
+
+Eras with a usable detection cohort: ['2014 - 2016', '2017 - 2019', '2020 - 2022']
+Adapt/no-adapt is decided inside the walk-forward loop, against the data
+the deployed model has been trained on so far — not precomputed here.
+
+======================================================================
+PHASE 3: Sequential adaptation
+======================================================================
+
+--- Step 0: source model, no adaptation (reference row) ---
+  source (val_calib)     mortality=0.870
+  2014 - 2016            mortality=0.849
+  2017 - 2019            mortality=0.858
+  2020 - 2022            mortality=0.855
+
+======================================================================
+STEP 1: era 2014 - 2016
+======================================================================
+  detector vs [source training era]  (n_ref=24428, n_cur=8496)
+    treatment  x 0.90 of the worst train-era year shift (30 features)  quiet
+    physiology x 1.95 (13 features)  FIRE
+    ⚠ FREEZE PREMISE VIOLATED — physiology has moved beyond the
+      variation the model was trained through. Action: flag  → logged only; Run B keeps its freeze.
+    oracle ΔAUROC (current deployed weights): B=-0.0039(0/1)
+  → UPDATE 1 triggered.
+  train=5223 (incl. 0 replay from 0 earlier era(s)) | val-ES=1625 | val-SEL=1648
+
+  LR sweep on val-SEL: [3e-05, 0.0001, 0.0003, 0.001, 0.003] (each arm at its own best)
+    B          new-era 3e-05:0.8862 0.0001:0.8889 0.0003:0.8897 0.001:0.8886 0.003:0.8851  → 0.0003
+               old-era 3e-05:0.8697 0.0001:0.8683 0.0003:0.8668 0.001:0.8649 0.003:0.8570
+    B_mirror   new-era 3e-05:0.8841 0.0001:0.8835 0.0003:0.8844 0.001:0.8830 0.003:0.8755  → 0.0003
+               old-era 3e-05:0.8727 0.0001:0.8726 0.0003:0.8714 0.001:0.8738 0.003:0.8732
+    C          new-era 3e-05:0.8870 0.0001:0.8871 0.0003:0.8878 0.001:0.8827 0.003:0.8729  → 0.0003
+               old-era 3e-05:0.8713 0.0001:0.8715 0.0003:0.8722 0.001:0.8681 0.003:0.8568
+    C_l2sp     new-era 3e-05:0.8867 0.0001:0.8867 0.0003:0.8866 0.001:0.8807 0.003:0.8826  → 3e-05
+               old-era 3e-05:0.8714 0.0001:0.8718 0.0003:0.8721 0.001:0.8604 0.003:0.8638
+
+    Retention sensitivity to the LR rule (old-era AUROC; source model = 0.8703):
+      B          selected lr=0.0003 → 0.8668   ⚠ retention would be +0.0029 better at lr=3e-05
+      B_mirror   selected lr=0.0003 → 0.8714   ⚠ retention would be +0.0025 better at lr=0.001
+      C          selected lr=0.0003 → 0.8722
+      C_l2sp     selected lr=3e-05 → 0.8714   ⚠ retention would be +0.0007 better at lr=0.0003
+      Quote the whole grid, not just the selected column. The claim to
+      defend is 'C retains less than B at every LR', which needs no rule.
+
+  B: two-stream, physio frozen (main claim) @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8897, 0.8911, 0.8874, 0.8883, 0.8849] | canonical = seed 2024
+
+  B_mirror: two-stream, treat+fusion frozen (mirror control) @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8844, 0.8827, 0.8826, 0.8827, 0.8841] | canonical = seed 123
+
+  C: two-stream, full fine-tune @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8878, 0.8859, 0.8862, 0.8863, 0.8875] | canonical = seed 2024
+
+  C_l2sp: two-stream, full fine-tune + L2-SP anchor to source @ lr=3e-05
+    seeds [42, 123, 7, 2024, 99] → [0.8867, 0.8871, 0.887, 0.8871, 0.8865] | canonical = seed 7
+  reference window → update-1 training mixture (2014 - 2016 + replay), n=5223 stays
+
+  --- After adapting at 2014 - 2016: AUROC on every era ---
+  mortality:
+    A          source (v=0.870  2014 - 20=0.849  2017 - 20=0.858  2020 - 20=0.855
+    B          source (v=0.868  2014 - 20=0.855  2017 - 20=0.865  2020 - 20=0.860
+    B_mirror   source (v=0.873  2014 - 20=0.853  2017 - 20=0.864  2020 - 20=0.858
+    C          source (v=0.873  2014 - 20=0.854  2017 - 20=0.862  2020 - 20=0.860
+    C_l2sp     source (v=0.871  2014 - 20=0.856  2017 - 20=0.866  2020 - 20=0.862
+
+======================================================================
+STEP 2: era 2017 - 2019
+======================================================================
+  detector vs [update-1 training mixture (2014 - 2016 + replay)]  (n_ref=5223, n_cur=9476)
+    treatment  x 0.78 of the worst train-era year shift (23 features)  quiet
+    physiology x 3.33 (26 features)  FIRE
+    ⚠ FREEZE PREMISE VIOLATED — physiology has moved beyond the
+      variation the model was trained through. Action: flag  → logged only; Run B keeps its freeze.
+    oracle ΔAUROC (current deployed weights): B=-0.0098(0/1)
+  → UPDATE 2 triggered.
+  train=6354 (incl. 500 replay from 1 earlier era(s)) | val-ES=1790 | val-SEL=1832
+
+  B: two-stream, physio frozen (main claim) @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8804, 0.8812, 0.8826, 0.8792, 0.8791] | canonical = seed 42
+
+  B_mirror: two-stream, treat+fusion frozen (mirror control) @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8727, 0.8689, 0.8716, 0.873, 0.8711] | canonical = seed 7
+
+  C: two-stream, full fine-tune @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8758, 0.8753, 0.8783, 0.8758, 0.8773] | canonical = seed 42
+
+  C_l2sp: two-stream, full fine-tune + L2-SP anchor to source @ lr=3e-05
+    seeds [42, 123, 7, 2024, 99] → [0.878, 0.8768, 0.8774, 0.8781, 0.8775] | canonical = seed 99
+  reference window → update-2 training mixture (2017 - 2019 + replay), n=6354 stays
+
+  --- After adapting at 2017 - 2019: AUROC on every era ---
+  mortality:
+    A          source (v=0.870  2014 - 20=0.849  2017 - 20=0.858  2020 - 20=0.855
+    B          source (v=0.868  2014 - 20=0.855  2017 - 20=0.864  2020 - 20=0.862
+    B_mirror   source (v=0.878  2014 - 20=0.853  2017 - 20=0.865  2020 - 20=0.858
+    C          source (v=0.875  2014 - 20=0.856  2017 - 20=0.868  2020 - 20=0.861
+    C_l2sp     source (v=0.873  2014 - 20=0.856  2017 - 20=0.866  2020 - 20=0.862
+
+======================================================================
+STEP 3: era 2020 - 2022
+======================================================================
+  detector vs [update-2 training mixture (2017 - 2019 + replay)]  (n_ref=6354, n_cur=3990)
+    treatment  x 0.49 of the worst train-era year shift (9 features)  quiet
+    physiology x 2.14 (33 features)  FIRE
+    ⚠ FREEZE PREMISE VIOLATED — physiology has moved beyond the
+      variation the model was trained through. Action: flag  → logged only; Run B keeps its freeze.
+    oracle ΔAUROC (current deployed weights): B=+0.0041(0/1)
+  → UPDATE 3 triggered.
+  train=3249 (incl. 499 replay from 2 earlier era(s)) | val-ES=640 | val-SEL=600
+
+  B: two-stream, physio frozen (main claim) @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8543, 0.8556, 0.8512, 0.8529, 0.8524] | canonical = seed 2024
+
+  B_mirror: two-stream, treat+fusion frozen (mirror control) @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8561, 0.8569, 0.8597, 0.8595, 0.8577] | canonical = seed 99
+
+  C: two-stream, full fine-tune @ lr=0.0003
+    seeds [42, 123, 7, 2024, 99] → [0.8588, 0.8561, 0.8614, 0.859, 0.8557] | canonical = seed 42
+
+  C_l2sp: two-stream, full fine-tune + L2-SP anchor to source @ lr=3e-05
+    seeds [42, 123, 7, 2024, 99] → [0.857, 0.8568, 0.8569, 0.8572, 0.8548] | canonical = seed 7
+  reference window → update-3 training mixture (2020 - 2022 + replay), n=3249 stays
+
+  --- After adapting at 2020 - 2022: AUROC on every era ---
+  mortality:
+    A          source (v=0.870  2014 - 20=0.849  2017 - 20=0.858  2020 - 20=0.855
+    B          source (v=0.869  2014 - 20=0.855  2017 - 20=0.864  2020 - 20=0.862
+    B_mirror   source (v=0.872  2014 - 20=0.852  2017 - 20=0.866  2020 - 20=0.859
+    C          source (v=0.872  2014 - 20=0.856  2017 - 20=0.868  2020 - 20=0.864
+    C_l2sp     source (v=0.872  2014 - 20=0.857  2017 - 20=0.867  2020 - 20=0.862
+
+======================================================================
+CLOSED-LOOP DETECTION SUMMARY
+======================================================================
+  era                 n  treat x  physio x  action      oracle
+  2014 - 2016      8496     0.90      1.95  UPDATE      agrees
+  2017 - 2019      9476     0.78      3.33  UPDATE      agrees
+  2020 - 2022      3990     0.49      2.14  UPDATE      agrees
+
+  updates: 3/3 eras  → ['2014 - 2016', '2017 - 2019', '2020 - 2022']
+  cadence: 1.00 updates/era, mean gap 1.0 eras
+  missed updates (oracle saw degradation, label-free gate did not): 0
+  Ratios are multiples of the largest year-to-year shift inside the training
+  era, measured against the data the deployed model was trained on. A ratio
+  that FALLS after an update is the update working; one that stays high is
+  drift the update did not absorb. Both belong in the paper.
+
+======================================================================
+PHASE 4: Retention matrix and forgetting
+======================================================================
+
+### mortality — AUROC by era after each adaptation step
+
+  Run A   ACC=0.8583   BWT=+0.0000   [never adapted — reference line]
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8703              0.8493              0.8585              0.8552
+  2014 - 2016                       0.8703              0.8493              0.8585              0.8552
+  2017 - 2019                       0.8703              0.8493              0.8585              0.8552
+  2020 - 2022                       0.8703              0.8493              0.8585              0.8552
+
+  Run B   ACC=0.8624   BWT=-0.0004
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8703              0.8493              0.8585              0.8552
+  2014 - 2016                       0.8678              0.8549              0.8648              0.8603
+  2017 - 2019                       0.8682              0.8554              0.8643              0.8616
+  2020 - 2022                       0.8689              0.8548              0.8637              0.8623
+
+  Run B_mirror   ACC=0.8624   BWT=-0.0001
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8703              0.8493              0.8585              0.8552
+  2014 - 2016                       0.8726              0.8535              0.8641              0.8578
+  2017 - 2019                       0.8783              0.8527              0.8649              0.8579
+  2020 - 2022                       0.8721              0.8518              0.8664              0.8592
+
+  Run C   ACC=0.8649   BWT=+0.0006
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8703              0.8493              0.8585              0.8552
+  2014 - 2016                       0.8729              0.8544              0.8624              0.8597
+  2017 - 2019                       0.8745              0.8562              0.8676              0.8611
+  2020 - 2022                       0.8723              0.8556              0.8677              0.8642
+
+  Run C_l2sp   ACC=0.8646   BWT=+0.0007
+  after step            source (val_calib)         2014 - 2016         2017 - 2019         2020 - 2022
+  source                            0.8703              0.8493              0.8585              0.8552
+  2014 - 2016                       0.8710              0.8562              0.8660              0.8617
+  2017 - 2019                       0.8726              0.8564              0.8662              0.8620
+  2020 - 2022                       0.8723              0.8567              0.8671              0.8623
+
+  ACC = mean AUROC across all eras after the final step.
+  BWT = mean change on EARLIER eras between when they were current and now.
+        Negative = forgetting. This is the two-stream claim: B should have
+        BWT closer to zero than C, at comparable ACC.
+
+--- Headline: ACC vs BWT (per label, per arm) ---
+
+  mortality
+    arm                ACC       BWT
+    A               0.8583   +0.0000
+    B               0.8624   -0.0004
+    B_mirror        0.8624   -0.0001
+    C               0.8649   +0.0006
+    C_l2sp          0.8646   +0.0007
+
+======================================================================
+PHASE 5: Paired bootstrap comparisons
+======================================================================
+Run A never sees adaptation data, so B > A only shows in-domain training
+helps. The defended claims are B vs C, B vs C_l2sp, and B vs B_mirror.
+
+--- Era source (val_calib)  [source era] ---
+    mortality               B − C        overall    Δ=-0.0034 [-0.0117, +0.0049] → tie
+    mortality               B − C_l2sp   overall    Δ=-0.0034 [-0.0097, +0.0029] → tie
+    mortality               B − B_mirror overall    Δ=-0.0033 [-0.0120, +0.0073] → tie
+    mortality               B − A        overall    Δ=-0.0014 [-0.0099, +0.0074] → tie
+    mortality               C − A        overall    Δ=+0.0020 [-0.0077, +0.0123] → tie
+    mortality          C_l2sp − C        overall    Δ=+0.0000 [-0.0056, +0.0067] → tie
+    mortality        B_mirror − C        overall    Δ=-0.0001 [-0.0067, +0.0075] → tie
+    mortality        B_mirror − C_l2sp   overall    Δ=-0.0002 [-0.0071, +0.0066] → tie
+    mortality        B_mirror − A        overall    Δ=+0.0019 [-0.0078, +0.0124] → tie
+
+--- Era 2014 - 2016  [earlier era (retention)] ---
+    mortality               B − C        overall    Δ=-0.0008 [-0.0045, +0.0030] → tie
+    mortality               B − C_l2sp   overall    Δ=-0.0019 [-0.0054, +0.0013] → tie
+    mortality               B − B_mirror overall    Δ=+0.0030 [-0.0018, +0.0077] → tie
+    mortality               B − A        overall    Δ=+0.0055 [+0.0014, +0.0098] → B
+    mortality               C − A        overall    Δ=+0.0063 [+0.0022, +0.0107] → C
+    mortality          C_l2sp − C        overall    Δ=+0.0011 [-0.0016, +0.0040] → tie
+    mortality        B_mirror − C        overall    Δ=-0.0038 [-0.0066, -0.0013] → C
+    mortality        B_mirror − C_l2sp   overall    Δ=-0.0049 [-0.0076, -0.0025] → C_l2sp
+    mortality        B_mirror − A        overall    Δ=+0.0024 [-0.0012, +0.0065] → tie
+
+--- Era 2017 - 2019  [earlier era (retention)] ---
+    mortality               B − C        overall    Δ=-0.0040 [-0.0072, -0.0008] → C
+    mortality               B − C_l2sp   overall    Δ=-0.0035 [-0.0065, -0.0009] → C_l2sp
+    mortality               B − B_mirror overall    Δ=-0.0027 [-0.0073, +0.0017] → tie
+    mortality               B − A        overall    Δ=+0.0052 [+0.0011, +0.0088] → B
+    mortality               C − A        overall    Δ=+0.0092 [+0.0054, +0.0129] → C
+    mortality          C_l2sp − C        overall    Δ=-0.0006 [-0.0028, +0.0016] → tie
+    mortality        B_mirror − C        overall    Δ=-0.0013 [-0.0038, +0.0010] → tie
+    mortality        B_mirror − C_l2sp   overall    Δ=-0.0008 [-0.0034, +0.0017] → tie
+    mortality        B_mirror − A        overall    Δ=+0.0079 [+0.0042, +0.0115] → B_mirror
+
+--- Era 2020 - 2022  [current era] ---
+    mortality               B − C        overall    Δ=-0.0019 [-0.0072, +0.0033] → tie
+    mortality               B − C_l2sp   overall    Δ=-0.0000 [-0.0041, +0.0046] → tie
+    mortality               B − B_mirror overall    Δ=+0.0031 [-0.0034, +0.0095] → tie
+    mortality               B − A        overall    Δ=+0.0071 [+0.0022, +0.0131] → B
+    mortality               C − A        overall    Δ=+0.0090 [+0.0032, +0.0142] → C
+    mortality          C_l2sp − C        overall    Δ=-0.0018 [-0.0049, +0.0018] → tie
+    mortality        B_mirror − C        overall    Δ=-0.0050 [-0.0081, -0.0014] → C
+    mortality        B_mirror − C_l2sp   overall    Δ=-0.0031 [-0.0066, +0.0006] → tie
+    mortality        B_mirror − A        overall    Δ=+0.0040 [-0.0015, +0.0101] → tie
+
+--- Held-out cohort composition, final era ---
+
+Run A  [reference line]
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  mortality                     0.8552         nan         nan   +0.0000   +0.0000
+
+Run B
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  mortality                     0.8623         nan         nan   +0.0053   -0.0014
+
+Run B_mirror
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  mortality                     0.8592         nan         nan   +0.0052   +0.0019
+
+Run C
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  mortality                     0.8642         nan         nan   +0.0077   +0.0020
+
+Run C_l2sp
+  label                     post AUROC   inc AUROC  prev AUROC      Δpre      Δval
+  mortality                     0.8623         nan         nan   +0.0080   +0.0020
+
+════════════════════════════════════════════════════════════
+METRIC GAIN EXPLANATION — Run A vs B vs C
+════════════════════════════════════════════════════════════
+
+  Post-drift AUROC gains vs frozen Run A:
+  label_mortality              B Δ=+0.0071 (small)  C Δ=+0.0090 (small)  → winner: C
+
+════════════════════════════════════════════════════════════
+ADAPTATION EXPLANATION — RunB
+════════════════════════════════════════════════════════════
+  Computing weight deltas...
+  Layer-stream weight changes:
+    physio     mean_rel_Δ=0.0000  max_rel_Δ=0.0000
+    treat      mean_rel_Δ=0.1572  max_rel_Δ=0.4132
+    fusion     mean_rel_Δ=0.1578  max_rel_Δ=0.2859
+  Computing treatment feature importance (permutation)...
+
+  Top treatment features driving adaptation (RunB):
+  Feature                             Importance    Drift   Combined
+  urine_output_obs_rate                   0.2355   0.2235   0.052635
+  lactate_time_delta_mean                 0.7720   0.0662   0.051067
+  urine_output_ml_kg_hr_obs_rate          0.1689   0.2235   0.037752
+  total_crystalloid_ml                    0.1368   0.0954   0.013047
+  gcs_verbal_obs_rate                     0.4157   0.0300   0.012455
+  heart_rate_obs_rate                     1.0000   0.0122   0.012161
+  mean_fio2_obs                           0.3671   0.0269   0.009862
+  lactate_obs_rate                        0.1676   0.0522   0.008742
+  resp_rate_obs_rate                      0.4694   0.0179   0.008382
+  bilirubin_total_obs_rate                0.2254   0.0330   0.007433
+
+--- Placebo adaptation control (pre-changepoint data (no quiet boundary available), matched size) ---
+  mortality        placebo Δ=+0.0029  real Δ at final era=+0.0071
+
+Generating plots...
+PIN_SPLIT: every cohort matches the pinned split exactly
+
+======================================================================
+SUMMARY & AUDIT LOG
+======================================================================
+🚨 CLINICAL PRACTICE SHIFT DETECTED
+Between the training period (2014-2016) and the new data (2020-2022), patient treatment patterns have changed significantly.
+To maintain accuracy safely, the model locked its physiological representation and exclusively updated its treatment and fusion layers. This restores accuracy by forcing the network to relearn the specific features that carry high predictive importance but suffered from severe real-world drift (most notably Urine Output Rate and Lactate Time Delta Mean).
+
+Key clinical changes driving this update:
+• Urine Output Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Urine Output Ml Kg Hr Rate: Average value decreased from 0.52 to 0.38 (Severe Drift PSI: 0.22)
+• Total Crystalloid Ml: Average value decreased from 908.82 to 639.82 (Severe Drift PSI: 0.10)
+• Lactate Time Delta Mean: Average value decreased from 2.24 to 2.11 (Severe Drift PSI: 0.07)
+• Central Line: Usage dropped by 5.9% in the newer data.
+
+What to check before writing this up:
+  1. acc_vs_bwt.png — Run B should sit up and to the RIGHT of C and C_l2sp:
+     comparable ACC, BWT closer to zero. That is the two-stream claim in one
+     figure. If C_l2sp matches B, the effect is regularization, not structure.
+  2. retention_trajectory_*.png — after an era's own adaptation step, a flat
+     line means no forgetting and a falling line means forgetting. Run C should
+     fall faster with each additional step; that compounding is the mechanism.
+  3. B vs B_mirror in paired_contrasts.json, on the EARLIER eras. If the mirror
+     ties B, freezing a large block is what helped and the decomposition claim
+     does not hold — this is the control a reviewer will look for first.
+  4. placebo_adaptation.json — the placebo ran at a boundary the detector called
+     quiet. If its gain approaches the real gain, 'adaptation helps' is really
+     'more data helps' and the drift framing is not carrying weight.
+  5. incident_* columns everywhere — the incident AUROC is the headline number,
+     not the overall one. Expect it substantially lower; that is the honest value.
+  6. drift_detection_log.json → 'deployable'. If false, only the label-dependent
+     oracle fired and the auto-detection claim has to be softened.
+
+On gradual drift: multiple boundaries firing is a RESULT, not a problem. State
+it plainly — 'drift in MIMIC-IV is continuous rather than a single event, so we
+adapt sequentially' is a stronger and more honest framing than a single
+changepoint, and it is why the sequential protocol is used here.
