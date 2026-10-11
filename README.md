@@ -126,8 +126,8 @@ Clinical predictive models in the Intensive Care Unit (ICU) undergo temporal deg
 Clone the repository and set up a Python virtual environment (Python 3.10+ recommended):
 
 ```bash
-git clone https://github.com/empresst/cloudTest.git
-cd cloudTest
+git clone https://github.com/empresst/DataAudit.git
+cd DataAudit
 
 python3 -m venv .venv
 source .venv/bin/activate
