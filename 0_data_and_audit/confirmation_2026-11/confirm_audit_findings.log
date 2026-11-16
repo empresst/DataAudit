@@ -1,0 +1,46 @@
+# Output of confirm_audit_findings.py (first version), MIMIC-IV 3.1, run on Kaggle.
+# Edited for publication: interpretive comments and the first version's PASS/FAIL labels are removed;
+# all numbers are unchanged. The current script in this folder prints the same numbers.
+
+== 1. BigQuery numbers re-computed with DuckDB (anchor-year group 2020 - 2022)
+Stays / stays with neither inputevents nor procedureevents rows: 10797 / 6272 (58.1%)
+Multi-stay admissions (total, all covered, all missing, mixed): (1019, 400, 591, 28)
+Multi-stay patients   (total, all covered, all missing, mixed): (1529, 555, 807, 167)
+Length-of-stay bins (stays, % without records): {'<1d': (1963, 56.3), '1-2d': (2876, 56.5), '2-5d': (3379, 61.1), '5d+': (2579, 57.3)}
+Phenylephrine stays (221749 only, 221749+229630+229632):
+  {'2008 - 2010': (4661, 5038), '2011 - 2013': (3777, 4020), '2014 - 2016': (3834, 4141), '2017 - 2019': (1845, 3495), '2020 - 2022': (311, 1147)}
+
+== 2. d_items labels
+       221289: Epinephrine  [Medications]
+       221662: Dopamine  [Medications]
+       221749: Phenylephrine  [Medications]
+       221906: Norepinephrine  [Medications]
+       222315: Vasopressin  [Medications]
+       227692: Isuprel  [Medications]
+       229617: Epinephrine.  [Medications]
+       229630: Phenylephrine (50/250)  [Medications]
+       229631: Phenylephrine (200/250)_OLD_1  [Medications]
+       229632: Phenylephrine (200/250)  [Medications]
+
+== 3. Order of stays with and without records (all stays with records before all stays without)
+Mixed patients, 2020 - 2022 anchor group: 159 of 167 (95.2%)
+Mixed patients, all anchor groups:        1190 of 1335 (89.1%)
+Mixed admissions, all anchor groups:      95 of 204
+
+== 4. Other tables, 2020 - 2022 anchor group
+       Stays WITHOUT inputevents/procedureevents rows: 6272
+         chartevents              6271  (100.0%)
+         outputevents             6043  (96.3%)
+         datetimeevents           6189  (98.7%)
+         ingredientevents            0  (0.0%)
+         ventilator settings      2824  (45.0%)
+         emar_same_admission      6112  (97.4%)
+         emar_during_icu_stay     6075  (96.9%)
+       Stays WITH inputevents/procedureevents rows: 4525
+         chartevents              4525  (100.0%)
+         outputevents             4381  (96.8%)
+         datetimeevents           4491  (99.2%)
+         ingredientevents         4499  (99.4%)
+         ventilator settings      1989  (44.0%)
+         emar_same_admission      4457  (98.5%)
+         emar_during_icu_stay     4428  (97.9%)

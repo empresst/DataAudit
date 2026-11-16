@@ -1,0 +1,14 @@
+# Output of check_unlinked_rows.py (first version), MIMIC-IV 3.1, run on Kaggle.
+# Edited for publication: the first version's PASS/FAIL labels and closing comment are removed;
+# counts below 10 are shown as <10; all other numbers are unchanged.
+2020-2022 stays with no inputevents/procedureevents rows: 6272
+
+== inputevents
+   rows in table: 10,953,713; NULL stay_id: 0; stay_id not in icustays: 0
+   stays without records that have same-patient rows inside their window: <10 (<10 rows)
+   stays without records that have same-admission rows inside their window: <10
+
+== procedureevents
+   rows in table: 808,706; NULL stay_id: 0; stay_id not in icustays: 0
+   stays without records that have same-patient rows inside their window: <10 (12 rows)
+   stays without records that have same-admission rows inside their window: <10
