@@ -1,0 +1,5 @@
+scenario,era,stays,events,B_minus_C
+before,2020 - 2022,6934,107,0.0512
+exclusion only,2020 - 2022,2314,107,-0.0188
+relabelling only,2020 - 2022,6736,123,0.0442
+both,2020 - 2022,2116,123,-0.0301
